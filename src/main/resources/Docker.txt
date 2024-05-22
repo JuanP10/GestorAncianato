@@ -1,0 +1,5 @@
+            docker run --name GestorAncianato
+            -e MYSQL_ROOT_PASSWORD=root
+            -e MYSQL_DATABASE=DB_GestorAncianato
+            -p 3306:3306
+            -d mysql
