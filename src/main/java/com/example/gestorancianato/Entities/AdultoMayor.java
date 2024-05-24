@@ -1,5 +1,6 @@
 package com.example.gestorancianato.Entities;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -11,19 +12,22 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table (name = "Donantes")
+@Table(name = "Adultos_Mayores")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class Donante {
+public class AdultoMayor {
     @Id
     private Integer cedula;
     private String nombre;
     private String apellido;
-    private String telefono;
-    private String direccion;
+    private Integer edad;
+    private Enum condicionMedica;
+    private Boolean esPensionado;
 
-    @OneToMany(mappedBy = "donante")
-    private List<Medicamento> medicamentoList;
+    @OneToMany(mappedBy = "adultomayor")
+    private List<Suministro> suministroList;
+
+
+
 }
