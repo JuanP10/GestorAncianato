@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -21,12 +22,17 @@ public class AdultoMayor {
     private Integer cedula;
     private String nombre;
     private String apellido;
-    private Integer edad;
-    private Enum condicionMedica;
+    private LocalDate fechaNacimiento;
     private Boolean esPensionado;
 
     @OneToMany(mappedBy = "adultomayor")
     private List<Suministro> suministroList;
+
+    @OneToMany(mappedBy = "adultoMayor")
+    private List<Suministro> suministros;
+
+    @OneToMany(mappedBy = "adultoMayor")
+    private List<CondicionMedica> condicionesMedicas;
 
 
 

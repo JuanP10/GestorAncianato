@@ -17,48 +17,22 @@ import java.util.Set;
 @AllArgsConstructor
 
 public class Medicamento {
-    @Id @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String nombre;
+    private int cantidad;
     private LocalDate fechaVencimiento;
 
-    @ElementCollection(targetClass = Categoria.class)
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "medicamento_categoria", joinColumns = @JoinColumn(name = "medicamento_id"))
-    @Column(name = "categoria")
-    private Set<Categoria> categorias;
-    private Integer cantidad;
-
-    @ManyToOne @JoinColumn(name = "idDonante")
+    @ManyToOne
+    @JoinColumn(name = "donanteID")
     private Donante donante;
 
-    @ManyToMany(mappedBy = "listaMedicamentos")
-    private List<Suministro> users = new ArrayList<>();
+    @OneToMany(mappedBy = "medicamento")
+    private List<CatMedicamento> catMedicamentos;
 
-
-    public enum Categoria {
-        ANALGESICO,
-        ANTIBIOTICO,
-        ANTIINFLAMATORIO,
-        ANTISEPTICO,
-        ANESTESICO,
-        ANTIVIRAL,
-        ANTIFUNGICO,
-        ANTIPARASITARIO,
-        ANTIEMETICO,
-        ANTIACIDO,
-        ANTIALERGICO,
-        ANTICOAGULANTE,
-        LAXANTE,
-        HIPOTENSOR,
-        HIPERTENSOR,
-        DIURETICO,
-        HORMONAL,
-        VITAMINA,
-        MINERAL,
-        SUPLEMENTO_DIETETICO,
-        OTRO
-    }
+    @OneToMany(mappedBy = "medicamento")
+    private List<Suministro> suministros;
 }
 
 

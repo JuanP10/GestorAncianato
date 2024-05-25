@@ -9,10 +9,11 @@ public interface DonanteService {
     Donante createDonante(Donante donante);
 
     List<Donante> getAllDonantes();
-    Optional<Donante> getDonanteById(Integer cedula);
+    Optional<Donante> getDonanteByCedula(Integer cedula);
     Optional<Donante> updateDonante(Integer cedula, Donante donante);
 
     void deleteDonante(Integer cedula);
-    
+
+    List<Donante> getDonantesByNombreAndApellido(String nombre, String apellido);
 
 }

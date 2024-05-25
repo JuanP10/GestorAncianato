@@ -18,20 +18,20 @@ import java.util.ArrayList;
 
 public class Suministro{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private Integer adultoMayorID;
+    private int id;
+    private int cantidad;
     private LocalDate fechaSuministro;
-    private Integer cantidad;
 
-    @ManyToMany
-    @JoinTable(
-            name = "suministro_medicamento",
-            joinColumns = @JoinColumn(name = "suministro_id"),
-            inverseJoinColumns = @JoinColumn(name = "medicamento_id")
-    )
-    private List<Medicamento> listaMedicamentos = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "medicamentoID")
+    private Medicamento medicamento;
 
-    @ManyToOne @JoinColumn(name = "idAdultoMayor")
+    @ManyToOne
+    @JoinColumn(name = "adultoMayorID")
     private AdultoMayor adultoMayor;
+
+    @ManyToOne
+    @JoinColumn(name = "enfermeroID")
+    private Enfermero enfermero;
     
 }

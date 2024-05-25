@@ -35,6 +35,21 @@ public class MedicamentoServiceImp implements MedicamentoService {
     }
 
     @Override
+    public List<Medicamento> getMedicamentosByCatMedicamentos(String catMedicamento) {
+        return medicamentoRepository.findByCatMedicamentos(catMedicamento);
+    }
+
+    @Override
+    public List<Medicamento> getMedicamentoByDonanteCedula(Integer cedula) {
+        return medicamentoRepository.findByDonanteCedula(cedula);
+    }
+
+    @Override
+    public List<Medicamento> getMedicamentoByFechaVencimientoMesAndAño(int mes, int año) {
+        return medicamentoRepository.findByFechaVencimientoMesAndAño(mes, año);
+    }
+
+    @Override
     public List<Medicamento> getAllMedicamentos() {
         return medicamentoRepository.findAll();
     }
@@ -45,9 +60,11 @@ public class MedicamentoServiceImp implements MedicamentoService {
         if (optionalMedicamento.isPresent()) {
             Medicamento medicamentoToUpdate = optionalMedicamento.get();
             medicamentoToUpdate.setNombre(medicamento.getNombre());
+            medicamentoToUpdate.setCantidad(medicamento.getCantidad());
+            medicamentoToUpdate.setCatMedicamentos(medicamento.getCatMedicamentos());
+            medicamentoToUpdate.setSuministros(medicamento.getSuministros());
             medicamentoToUpdate.setFechaVencimiento(medicamento.getFechaVencimiento());
             medicamentoToUpdate.setDonante(medicamento.getDonante());
-            medicamentoToUpdate.setCategorias(medicamento.getCategorias());
             return Optional.of(medicamentoRepository.save(medicamentoToUpdate));
         } else {
             log.error("El Medicamento con id {} no existe", id);
@@ -56,13 +73,10 @@ public class MedicamentoServiceImp implements MedicamentoService {
     }
 
     @Override
-    public void deleteMedicamento(Integer id) {
+    public void deleteMedicamentoById(Integer id) {
         medicamentoRepository.deleteById(id);
     }
 
-    @Override
-    public List<Medicamento> getMedicamentoByCategorias(String categorias) {
-        return medicamentoRepository.findByCategorias(categorias);
-    }
+
 }
 

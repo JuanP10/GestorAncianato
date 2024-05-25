@@ -3,7 +3,6 @@ package com.example.gestorancianato.Services.ServicesImp;
 import com.example.gestorancianato.Entities.Donante;
 import com.example.gestorancianato.Repositories.DonanteRepository;
 import com.example.gestorancianato.Services.DonanteService;
-import lombok.AllArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +11,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
-public class DonanteServiceImp implements DonanteService {
+public class DonanteServiceImp  implements DonanteService{
 
-    private final DonanteRepository donanteRepository;
+    private final  DonanteRepository donanteRepository;
     private static final Logger log = LoggerFactory.getLogger(DonanteServiceImp.class);
+
+
+    public DonanteServiceImp(DonanteRepository donanteRepository) {
+        this.donanteRepository = donanteRepository;
+    }
 
     @Override
     public Donante createDonante(Donante donante) {
@@ -29,22 +32,22 @@ public class DonanteServiceImp implements DonanteService {
     }
 
     @Override
-    public Optional<Donante> getDonanteById(Integer cedula) {
-        return donanteRepository.findById(cedula);
+    public Optional<Donante> getDonanteByCedula(Integer cedula) {
+        return donanteRepository.findByCedula(cedula);
     }
 
     @Override
     public Optional<Donante> updateDonante(Integer cedula, Donante donante) {
         Optional<Donante> optionalDonante = donanteRepository.findById(cedula);
         if (optionalDonante.isPresent()) {
-            Donante existingDonante = optionalDonante.get();
-            existingDonante.setNombre(donante.getNombre());
-            existingDonante.setApellido(donante.getApellido());
-            existingDonante.setTelefono(donante.getTelefono());
-            existingDonante.setDireccion(donante.getDireccion());
-            return Optional.of(donanteRepository.save(existingDonante));
+            Donante donanteToUpdate = optionalDonante.get();
+            donanteToUpdate.setNombre(donante.getNombre());
+            donanteToUpdate.setApellido(donante.getApellido());
+            donanteToUpdate.setTelefono(donante.getTelefono());
+            donanteToUpdate.setDireccion(donante.getDireccion());
+            return Optional.of(donanteRepository.save(donanteToUpdate));
         } else {
-            log.error("El donante con cédula {} no existe", cedula);
+            log.error("El Donante con cedula {} no existe", cedula);
             return Optional.empty();
         }
     }
@@ -52,5 +55,10 @@ public class DonanteServiceImp implements DonanteService {
     @Override
     public void deleteDonante(Integer cedula) {
         donanteRepository.deleteById(cedula);
+    }
+
+    @Override
+    public List<Donante> getDonantesByNombreAndApellido(String nombre, String apellido) {
+        return donanteRepository.findByNombreOrApellido(nombre, apellido);
     }
 }

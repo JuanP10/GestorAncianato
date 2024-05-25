@@ -21,9 +21,9 @@ public class Donante {
     private Integer cedula;
     private String nombre;
     private String apellido;
-    private String telefono;
+    private Long telefono;
     private String direccion;
 
     @OneToMany(mappedBy = "donante")
-    private List<Medicamento> medicamentoList;
+    private List<Medicamento> medicamentos;
 }
