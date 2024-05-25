@@ -25,9 +25,6 @@ public class AdultoMayor {
     private LocalDate fechaNacimiento;
     private Boolean esPensionado;
 
-    @OneToMany(mappedBy = "adultomayor")
-    private List<Suministro> suministroList;
-
     @OneToMany(mappedBy = "adultoMayor")
     private List<Suministro> suministros;
 

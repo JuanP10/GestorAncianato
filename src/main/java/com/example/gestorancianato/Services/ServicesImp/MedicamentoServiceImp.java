@@ -33,8 +33,8 @@ public class MedicamentoServiceImp implements MedicamentoService {
     }
 
     @Override
-    public List<Medicamento> getMedicamentosByCatMedicamentos(String catMedicamento) {
-        return medicamentoRepository.findByCatMedicamentos(catMedicamento);
+    public List<Medicamento> getMedicamentosByCatMedicamentos(String categoria) {
+        return medicamentoRepository.findByCatMedicamentos(categoria);
     }
 
     @Override

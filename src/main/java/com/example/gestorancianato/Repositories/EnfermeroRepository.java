@@ -11,5 +11,8 @@ public interface EnfermeroRepository extends JpaRepository<Enfermero,Integer> {
 
     List<Enfermero> findByCedula(Integer integer);
 
+    List<Enfermero> findByNombreOrApellido(String nombre, String apellido);
+
+
 
 }

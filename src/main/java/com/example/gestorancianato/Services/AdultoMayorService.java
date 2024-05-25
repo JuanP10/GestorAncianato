@@ -1,7 +1,6 @@
 package com.example.gestorancianato.Services;
 
 import com.example.gestorancianato.Entities.AdultoMayor;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +17,7 @@ public interface AdultoMayorService {
 
     List<AdultoMayor> getAdultoMayorByNombreAndApellido(String nombre, String apellido);
 
-    Optional<AdultoMayor> findByAdultoMayorByCondicionMedica(String CondicionMedica);
+    List<AdultoMayor> findByAdultoMayorByCondicionMedica(String CondicionMedica);
 
 
 }

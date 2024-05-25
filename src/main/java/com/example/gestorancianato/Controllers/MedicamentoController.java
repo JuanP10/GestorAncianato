@@ -23,7 +23,7 @@ public class MedicamentoController {
         return new ResponseEntity<>(medicamentoService.createMedicamento(medicamento), HttpStatus.CREATED);
     }
 
-    @PostMapping("Actualizar/{id}")
+    @PutMapping("Actualizar/{id}")
     public ResponseEntity<Medicamento> updateMedicamento(@PathVariable Integer id, @RequestBody Medicamento medicamento){
         return new ResponseEntity<>(medicamentoService.updateMedicamento(id, medicamento).orElse(null), HttpStatus.OK);
     }

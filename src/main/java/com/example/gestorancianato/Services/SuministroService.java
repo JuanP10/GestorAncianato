@@ -22,8 +22,9 @@ public interface SuministroService {
 
     Optional<Suministro> getSuministroById(Integer id);
 
+    Optional<Suministro> getSuministroByFecha(LocalDate fechaInicio, LocalDate fechaFin);
 
+    List<Suministro> getSuministroByMedicamento(String medicamento);
 
-
-
+    List<Suministro> getSuministroByAdultoMayor(Integer cedula);
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+//@Repository
 public interface CatMedicamentoRepository extends JpaRepository<CatMedicamento, Integer> {
     @Override
     Optional<CatMedicamento> findById(Integer integer);

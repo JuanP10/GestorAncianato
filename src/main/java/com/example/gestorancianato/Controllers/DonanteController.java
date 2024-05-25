@@ -22,7 +22,7 @@ public class DonanteController {
         return new ResponseEntity<>(donanteService.createDonante(donante), HttpStatus.CREATED);
     }
 
-    @PostMapping ("/{cedula}")
+    @PutMapping ("/{cedula}")
     public ResponseEntity<Donante> updateDonante(@PathVariable Integer cedula, @RequestBody Donante donante){
         return new ResponseEntity<>(donanteService.updateDonante(cedula, donante).orElse(null), HttpStatus.OK);
     }

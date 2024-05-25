@@ -10,5 +10,7 @@ public interface CondicionRepository extends JpaRepository<Condicion, Integer> {
     @Override
     Optional<Condicion> findById(Integer integer);
 
+    Optional<Condicion> findByNombre(String nombre);
+
 
 }

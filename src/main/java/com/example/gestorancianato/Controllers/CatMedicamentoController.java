@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+//@RestController
 @RequestMapping ("/catMedicamento")
 public class CatMedicamentoController {
     private final CatMedicamentoService catMedicamentoService;
@@ -22,7 +22,7 @@ public class CatMedicamentoController {
         return new ResponseEntity<>(catMedicamentoService.createCatMedicamento(catMedicamento), HttpStatus.CREATED);
     }
 
-    @PostMapping ("/actualizar/{id}")
+    @PutMapping ("/actualizar/{id}")
     public ResponseEntity<CatMedicamento> updateCatMedicamento(@PathVariable Integer id, @RequestBody CatMedicamento catMedicamento){
         return new ResponseEntity<>(catMedicamentoService.updateCatMedicamento(id, catMedicamento).orElse(null), HttpStatus.OK);
     }

@@ -5,6 +5,7 @@ import com.example.gestorancianato.Repositories.AdultoMayorRepository;
 import com.example.gestorancianato.Services.AdultoMayorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -18,6 +19,7 @@ public class AdultoMayorServiceImp implements AdultoMayorService {
     private static final Logger log = LoggerFactory.getLogger(AdultoMayorServiceImp.class);
 
 
+    @Autowired
     public AdultoMayorServiceImp(AdultoMayorRepository adultoMayorRepository) {
         this.adultoMayorRepository = adultoMayorRepository;
     }
@@ -65,7 +67,7 @@ public class AdultoMayorServiceImp implements AdultoMayorService {
     }
 
     @Override
-    public Optional<AdultoMayor> findByAdultoMayorByCondicionMedica(String CondicionMedica) {
-        return adultoMayorRepository.getAdultoMayorByCondicionesMedicas(CondicionMedica);
+    public List<AdultoMayor> findByAdultoMayorByCondicionMedica(String CondicionMedica) {
+        return adultoMayorRepository.findAdultosMayoresByCondicionMedica(CondicionMedica);
     }
 }

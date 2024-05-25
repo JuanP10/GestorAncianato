@@ -5,6 +5,7 @@ import com.example.gestorancianato.Repositories.SuministroRepository;
 import com.example.gestorancianato.Services.SuministroService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,4 +54,20 @@ public class SuministroServiceImp implements SuministroService {
     public Optional<Suministro> getSuministroById(Integer id) {
         return suministroRepository.findById(id);
     }
+
+    @Override
+    public Optional<Suministro> getSuministroByFecha(LocalDate fechaInicio, LocalDate fechaFin) {
+        return suministroRepository.findByFechaSuministroBetween(fechaInicio, fechaFin);
+    }
+
+    @Override
+    public List<Suministro> getSuministroByMedicamento(String medicamento) {
+        return suministroRepository.findSuministrosByMedicamento(medicamento);
+    }
+
+    @Override
+    public List<Suministro> getSuministroByAdultoMayor(Integer cedula) {
+        return suministroRepository.findSuministrosByAdultoMayor_Cedula(cedula);
+    }
+
 }

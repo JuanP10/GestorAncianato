@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface MedicamentoService {
     Optional<Medicamento> getMedicamentoById(Integer id);
-    List<Medicamento> getMedicamentosByCatMedicamentos(String catMedicamento);
+    List<Medicamento> getMedicamentosByCatMedicamentos(String categoria);
 
     List<Medicamento> getMedicamentoByDonanteCedula(Integer cedula);
     List<Medicamento> getMedicamentoByFechaVencimientoMesAndAño(int mes, int año);

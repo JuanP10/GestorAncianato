@@ -22,7 +22,7 @@ public class CategoriaController {
         return new ResponseEntity<>(categoriaService.createCategoria(categoria), HttpStatus.CREATED);
     }
 
-    @PostMapping("Actualizar/{id}")
+    @PutMapping("Actualizar/{id}")
     public ResponseEntity<Categoria> updateCategoria(@PathVariable Integer id, @RequestBody Categoria categoria){
         return new ResponseEntity<>(categoriaService.updateCategoria(id, categoria).orElse(null), HttpStatus.OK);
     }

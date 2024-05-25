@@ -9,10 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface CondicionMedicaRepository extends JpaRepository<CondicionMedica, Integer> {
-
     @Override
     Optional<CondicionMedica> findById(Integer id);
-
-
 
 }
