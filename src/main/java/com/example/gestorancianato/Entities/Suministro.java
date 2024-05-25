@@ -35,3 +35,4 @@ public class Suministro{
     private Enfermero enfermero;
     
 }
+

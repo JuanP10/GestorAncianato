@@ -18,8 +18,6 @@ public class MedicamentoServiceImp implements MedicamentoService {
     private final MedicamentoRepository medicamentoRepository;
     private static final Logger log = LoggerFactory.getLogger(MedicamentoServiceImp.class);
 
-
-    @Autowired
     public MedicamentoServiceImp(MedicamentoRepository medicamentoRepository) {
         this.medicamentoRepository = medicamentoRepository;
     }
