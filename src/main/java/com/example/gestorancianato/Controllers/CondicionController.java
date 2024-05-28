@@ -1,7 +1,8 @@
 package com.example.gestorancianato.Controllers;
 
+import com.example.gestorancianato.Dtos.CondicionMedicaDto;
 import com.example.gestorancianato.Entities.CondicionMedica;
-import com.example.gestorancianato.Services.CondicionService;
+import com.example.gestorancianato.Services.CondicionMedicaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,41 +12,45 @@ import java.util.List;
 @RestController
 @RequestMapping("/condicion")
 public class CondicionController {
-    private final CondicionService condicionService;
+    private final CondicionMedicaService condicionMedicaService;
 
-    public CondicionController(CondicionService condicionService) {
-        this.condicionService = condicionService;
+    public CondicionController(CondicionMedicaService condicionMedicaService) {
+        this.condicionMedicaService = condicionMedicaService;
     }
 
-    @PostMapping("/registrar")
-    public ResponseEntity <CondicionMedica> createConcion (@RequestBody CondicionMedica condicionMedica){
-        return new ResponseEntity <>(condicionService.createCondicion(condicionMedica), HttpStatus.CREATED);
+    @PostMapping()
+    public ResponseEntity <CondicionMedicaDto> createConcion (@RequestBody CondicionMedicaDto condicionMedica){
+        return new ResponseEntity <>(condicionMedicaService.createCondicion(condicionMedica), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity <CondicionMedica> updateCondicion (@PathVariable Integer id, @RequestBody CondicionMedica condicionMedica){
-        return new ResponseEntity <>(condicionService.updateCondicion(id, condicionMedica).orElse(null), HttpStatus.OK);
+    public ResponseEntity <CondicionMedicaDto> updateCondicion (@PathVariable Integer id, @RequestBody CondicionMedicaDto condicionMedica){
+        CondicionMedicaDto condicionMedicaDto = condicionMedicaService.updateCondicion(id, condicionMedica);
+        return new ResponseEntity<>(condicionMedicaDto, HttpStatus.OK);
     }
 
     @DeleteMapping ("/{id}")
-    public ResponseEntity <Void> deleteCondicion (@PathVariable Integer id){
-        condicionService.deleteCondicionById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity <String> deleteCondicion (@PathVariable Integer id){
+        condicionMedicaService.deleteCondicionById(id);
+        return new ResponseEntity<>("Condicion Medica eliminada", HttpStatus.OK);
     }
 
     @GetMapping ("/all")
-    public List<CondicionMedica> getAllCondicion(){
-        return condicionService.getAllCondiciones();
+    public ResponseEntity<List<CondicionMedicaDto>> getAllCondicion(){
+        List<CondicionMedicaDto> condicionMedicaDtoList = condicionMedicaService.getAllCondiciones();
+        return new ResponseEntity<>(condicionMedicaDtoList, HttpStatus.OK);
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity <CondicionMedica> getCondicionById (@PathVariable Integer id){
-        return new ResponseEntity<>(condicionService.getCondicionById(id).orElse(null), HttpStatus.OK);
+    public ResponseEntity <CondicionMedicaDto> getCondicionById (@PathVariable Integer id){
+        CondicionMedicaDto condicionMedicaDto = condicionMedicaService.getCondicionById(id);
+        return new ResponseEntity<>(condicionMedicaDto, HttpStatus.OK);
     }
 
     @GetMapping ("/nombre/{nombre}")
-    public ResponseEntity <CondicionMedica> getCondicionByNombre (@PathVariable String nombre){
-        return new ResponseEntity<>(condicionService.getCondicionByNombre(nombre).orElse(null), HttpStatus.OK);
+    public ResponseEntity <CondicionMedicaDto> getCondicionByNombre (@PathVariable String nombre){
+        CondicionMedicaDto condicionMedicaDto = condicionMedicaService.getCondicionByNombre(nombre);
+        return new ResponseEntity<>(condicionMedicaDto, HttpStatus.OK);
     }
 
 

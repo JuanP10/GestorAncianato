@@ -1,7 +1,8 @@
 package com.example.gestorancianato.Controllers;
 
+import com.example.gestorancianato.Dtos.CategoriaMedicamentoDto;
 import com.example.gestorancianato.Entities.CategoriaMedicamento;
-import com.example.gestorancianato.Services.CategoriaService;
+import com.example.gestorancianato.Services.CategoriaMedicamentoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,36 +12,38 @@ import java.util.List;
 @RestController
 @RequestMapping ("/Categoria")
 public class CategoriaController {
-    private final CategoriaService categoriaService;
+    private final CategoriaMedicamentoService categoriaMedicamentoService;
 
-    public CategoriaController(CategoriaService categoriaService) {
-        this.categoriaService = categoriaService;
+    public CategoriaController(CategoriaMedicamentoService categoriaMedicamentoService) {
+        this.categoriaMedicamentoService = categoriaMedicamentoService;
     }
 
-    @PostMapping("/Registrar")
-    public ResponseEntity<CategoriaMedicamento> registrarCategoria(@RequestBody CategoriaMedicamento categoriaMedicamento){
-        return new ResponseEntity<>(categoriaService.createCategoria(categoriaMedicamento), HttpStatus.CREATED);
+    @PostMapping()
+    public ResponseEntity<CategoriaMedicamentoDto> registrarCategoria(@RequestBody CategoriaMedicamentoDto categoriaMedicamento){
+        return new ResponseEntity<>(categoriaMedicamentoService.createCategoria(categoriaMedicamento), HttpStatus.CREATED);
     }
 
-    @PutMapping("Actualizar/{id}")
-    public ResponseEntity<CategoriaMedicamento> updateCategoria(@PathVariable Integer id, @RequestBody CategoriaMedicamento categoriaMedicamento){
-        return new ResponseEntity<>(categoriaService.updateCategoria(id, categoriaMedicamento).orElse(null), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoriaMedicamentoDto> updateCategoria(@PathVariable Integer id, @RequestBody CategoriaMedicamentoDto categoriaMedicamento){
+        return new ResponseEntity<>(categoriaMedicamentoService.updateCategoria(id, categoriaMedicamento), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategoria(@PathVariable Integer id){
-        categoriaService.deleteCategoriaById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<String> deleteCategoria(@PathVariable Integer id){
+        categoriaMedicamentoService.deleteCategoriaById(id);
+        return new ResponseEntity<>("Categoria eliminada", HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriaMedicamento> getCategoriaById(@PathVariable Integer id){
-        return new ResponseEntity<>(categoriaService.getCategoriaById(id).orElse(null), HttpStatus.OK);
+    public ResponseEntity<CategoriaMedicamentoDto> getCategoriaById(@PathVariable Integer id){
+        CategoriaMedicamentoDto categoriaMedicamento = categoriaMedicamentoService.getCategoriaById(id);
+        return new ResponseEntity<>(categoriaMedicamento, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public List<CategoriaMedicamento> getAllCategorias(){
-        return categoriaService.getAllCategorias();
+    public ResponseEntity<List<CategoriaMedicamentoDto>> getAllCategorias(){
+        List<CategoriaMedicamentoDto> categorias = categoriaMedicamentoService.getAllCategorias();
+        return new ResponseEntity<>(categorias, HttpStatus.OK);
     }
 
 
