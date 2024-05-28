@@ -1,20 +1,19 @@
 package com.example.gestorancianato.Services;
 
-import com.example.gestorancianato.Entities.Enfermero;
+import com.example.gestorancianato.Dtos.EnfermeroDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EnfermeroService {
-    Enfermero createEnfermero(Enfermero enfermero);
+    EnfermeroDto createEnfermero(EnfermeroDto enfermero);
 
-    List<Enfermero> getAllEnfermeros();
+    List<EnfermeroDto> getAllEnfermeros();
 
-    List<Enfermero> getEnfermeroByCedula(Integer integer);
+    List<EnfermeroDto> getEnfermeroByCedula(Integer integer);
 
-    Optional<Enfermero> updateEnfermero(Integer cedula, Enfermero enfermero);
+    EnfermeroDto updateEnfermero(Integer cedula, EnfermeroDto enfermero);
 
     void deleteEnfermero(Integer cedula);
 
-    List<Enfermero> getEnfermeroByNombreAndApellido(String nombre, String apellido);
+    List<EnfermeroDto> getEnfermeroByNombreAndApellido(String nombre, String apellido);
 }

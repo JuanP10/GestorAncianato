@@ -1,6 +1,6 @@
 package com.example.gestorancianato.Controllers;
 
-import com.example.gestorancianato.Entities.Suministro;
+import com.example.gestorancianato.Dtos.SuministroDto;
 import com.example.gestorancianato.Services.SuministroService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,45 +19,50 @@ public class SuministroController {
         this.suministroService = suministroService;
     }
 
-    @PostMapping ("/Registrar")
-    public ResponseEntity<Suministro> registrarSuministro(@RequestBody Suministro suministro){
+    @PostMapping
+    public ResponseEntity<SuministroDto> registrarSuministro(@RequestBody SuministroDto suministro){
         return new ResponseEntity<>(suministroService.createSuministro(suministro),HttpStatus.CREATED);
     }
 
-    @PutMapping ("/Actualizar/{id}")
-    public ResponseEntity<Suministro> updateSuministro(@PathVariable Integer id, @RequestBody Suministro suministro){
-        return new ResponseEntity<>(suministroService.updateSuministro(id, suministro).orElse(null), HttpStatus.OK);
+    @PutMapping ("/{id}")
+    public ResponseEntity<SuministroDto> updateSuministro(@PathVariable Integer id, @RequestBody SuministroDto suministro){
+         SuministroDto suministroDto = suministroService.updateSuministro(id, suministro);
+         return new ResponseEntity<>(suministroDto, HttpStatus.OK);
     }
 
     @DeleteMapping ("/{id}")
-    public ResponseEntity<Void> deleteSuministro(@PathVariable Integer id){
+    public ResponseEntity<String> deleteSuministro(@PathVariable Integer id){
         suministroService.deleteSuministroById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Suministro eliminado", HttpStatus.OK);
     }
 
     @GetMapping ("/all")
-    public List<Suministro> getAllSuministros(){
-        return suministroService.getAllSuministros();
+    public ResponseEntity<List<SuministroDto>> getAllSuministros(){
+        List<SuministroDto> suministros = suministroService.getAllSuministros();
+        return new ResponseEntity<>(suministros, HttpStatus.OK);
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity<Suministro> getSuministroById(@PathVariable Integer id){
-        return new ResponseEntity<>(suministroService.getSuministroById(id).orElse(null), HttpStatus.OK);
+    public ResponseEntity<SuministroDto> getSuministroById(@PathVariable Integer id){
+        return new ResponseEntity<>(suministroService.getSuministroById(id), HttpStatus.OK);
     }
 
     @GetMapping ("/fecha/{fechaInicio}/{fechaFin}")
-    public ResponseEntity<Suministro> getSuministroByFecha(@PathVariable LocalDate fechaInicio, @PathVariable LocalDate fechaFin){
-        return new ResponseEntity<>(suministroService.getSuministroByFecha(fechaInicio, fechaFin).orElse(null), HttpStatus.OK);
+    public List<ResponseEntity<SuministroDto>> getSuministrosByFecha(@PathVariable LocalDate fechaInicio, @PathVariable LocalDate fechaFin){
+        List<SuministroDto> suministros = suministroService.getSuministrosByFecha(fechaInicio, fechaFin);
+        return suministros.stream().map(ResponseEntity::ok).toList();
     }
 
     @GetMapping ("/medicamento/{medicamento}")
-    public List<Suministro> getSuministroByMedicamento(@PathVariable String medicamento){
-        return suministroService.getSuministroByMedicamento(medicamento);
+    public ResponseEntity<List<SuministroDto>> getSuministroByMedicamento(@PathVariable String medicamento){
+        List<SuministroDto> suministros = suministroService.getSuministrosByMedicamento(medicamento);
+        return new ResponseEntity<>(suministros, HttpStatus.OK);
     }
 
     @GetMapping ("/adultoMayor/{cedula}")
-    public List<Suministro> getSuministroByAdultoMayor(@PathVariable Integer cedula){
-        return suministroService.getSuministroByAdultoMayor(cedula);
+    public ResponseEntity<List<SuministroDto>> getSuministroByAdultoMayor(@PathVariable Integer cedula){
+        List<SuministroDto> suministros = suministroService.getSuministrosByAdultoMayor(cedula);
+        return new ResponseEntity<>(suministros, HttpStatus.OK);
     }
 
 }

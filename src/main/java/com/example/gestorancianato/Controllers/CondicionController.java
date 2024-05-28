@@ -1,6 +1,6 @@
 package com.example.gestorancianato.Controllers;
 
-import com.example.gestorancianato.Entities.Condicion;
+import com.example.gestorancianato.Entities.CondicionMedica;
 import com.example.gestorancianato.Services.CondicionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +18,13 @@ public class CondicionController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity <Condicion> createConcion (@RequestBody Condicion condicion){
-        return new ResponseEntity <>(condicionService.createCondicion(condicion), HttpStatus.CREATED);
+    public ResponseEntity <CondicionMedica> createConcion (@RequestBody CondicionMedica condicionMedica){
+        return new ResponseEntity <>(condicionService.createCondicion(condicionMedica), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity <Condicion> updateCondicion (@PathVariable Integer id, @RequestBody Condicion condicion){
-        return new ResponseEntity <>(condicionService.updateCondicion(id, condicion).orElse(null), HttpStatus.OK);
+    public ResponseEntity <CondicionMedica> updateCondicion (@PathVariable Integer id, @RequestBody CondicionMedica condicionMedica){
+        return new ResponseEntity <>(condicionService.updateCondicion(id, condicionMedica).orElse(null), HttpStatus.OK);
     }
 
     @DeleteMapping ("/{id}")
@@ -34,17 +34,17 @@ public class CondicionController {
     }
 
     @GetMapping ("/all")
-    public List<Condicion> getAllCondicion(){
+    public List<CondicionMedica> getAllCondicion(){
         return condicionService.getAllCondiciones();
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity <Condicion> getCondicionById (@PathVariable Integer id){
+    public ResponseEntity <CondicionMedica> getCondicionById (@PathVariable Integer id){
         return new ResponseEntity<>(condicionService.getCondicionById(id).orElse(null), HttpStatus.OK);
     }
 
     @GetMapping ("/nombre/{nombre}")
-    public ResponseEntity <Condicion> getCondicionByNombre (@PathVariable String nombre){
+    public ResponseEntity <CondicionMedica> getCondicionByNombre (@PathVariable String nombre){
         return new ResponseEntity<>(condicionService.getCondicionByNombre(nombre).orElse(null), HttpStatus.OK);
     }
 

@@ -1,5 +1,6 @@
 package com.example.gestorancianato.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,8 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 
 public class Medicamento {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nombre;
     private int cantidad;
@@ -28,11 +28,16 @@ public class Medicamento {
     @JoinColumn(name = "donanteID")
     private Donante donante;
 
-    @OneToMany(mappedBy = "medicamento")
-    private List<CatMedicamento> catMedicamentos;
+    @ManyToMany
+    @JoinTable(
+            name = "Medicamento_Categoria",
+            joinColumns = @JoinColumn(name = "medicamento_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+    private List<CategoriaMedicamento> categoriasMedicamentos;
 
     @OneToMany(mappedBy = "medicamento")
     private List<Suministro> suministros;
+
 }
 
 

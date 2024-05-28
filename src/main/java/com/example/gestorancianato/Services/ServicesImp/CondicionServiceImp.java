@@ -1,9 +1,8 @@
 package com.example.gestorancianato.Services.ServicesImp;
 
-import com.example.gestorancianato.Entities.Condicion;
+import com.example.gestorancianato.Entities.CondicionMedica;
 import com.example.gestorancianato.Repositories.CondicionRepository;
 import com.example.gestorancianato.Services.CondicionService;
-import com.example.gestorancianato.Services.EnfermeroService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,23 +25,23 @@ public class CondicionServiceImp implements CondicionService {
     }
 
     @Override
-    public Optional<Condicion> getCondicionById(Integer id) {
+    public Optional<CondicionMedica> getCondicionById(Integer id) {
         return condicionRepository.findById(id);
     }
 
     @Override
-    public Condicion createCondicion(Condicion condicion) {
-        return condicionRepository.save(condicion);
+    public CondicionMedica createCondicion(CondicionMedica condicionMedica) {
+        return condicionRepository.save(condicionMedica);
     }
 
     @Override
-    public Optional<Condicion> updateCondicion(Integer id, Condicion condicion) {
-        Optional<Condicion> optionalCondicion = condicionRepository.findById(id);
+    public Optional<CondicionMedica> updateCondicion(Integer id, CondicionMedica condicionMedica) {
+        Optional<CondicionMedica> optionalCondicion = condicionRepository.findById(id);
         if (optionalCondicion.isPresent()){
-            Condicion condicionToUpdate = optionalCondicion.get();
-            condicionToUpdate.setNombre(condicion.getNombre());
-            condicionToUpdate.setCondicionesMedicas(condicion.getCondicionesMedicas());
-            return Optional.of(condicionRepository.save(condicionToUpdate));
+            CondicionMedica condicionMedicaToUpdate = optionalCondicion.get();
+            condicionMedicaToUpdate.setNombre(condicionMedica.getNombre());
+            condicionMedicaToUpdate.setAdultosMayores(condicionMedica.getAdultosMayores());
+            return Optional.of(condicionRepository.save(condicionMedicaToUpdate));
 
         } else{
             log.error("La condicion con id {} no existe", id);
@@ -56,12 +55,12 @@ public class CondicionServiceImp implements CondicionService {
     }
 
     @Override
-    public List<Condicion> getAllCondiciones() {
+    public List<CondicionMedica> getAllCondiciones() {
         return condicionRepository.findAll();
     }
 
     @Override
-    public Optional<Condicion> getCondicionByNombre(String nombre) {
+    public Optional<CondicionMedica> getCondicionByNombre(String nombre) {
         return condicionRepository.findByNombre(nombre);
     }
 }

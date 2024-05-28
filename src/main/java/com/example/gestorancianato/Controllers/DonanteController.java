@@ -1,5 +1,6 @@
 package com.example.gestorancianato.Controllers;
 
+import com.example.gestorancianato.Dtos.DonanteDto;
 import com.example.gestorancianato.Entities.Donante;
 import com.example.gestorancianato.Services.DonanteService;
 import org.springframework.http.HttpStatus;
@@ -17,35 +18,35 @@ public class DonanteController {
         this.donanteService = donanteService;
     }
 
-    @PostMapping("/Registrar")
-    public ResponseEntity<Donante> registrarDonante(@RequestBody Donante donante){
+    @PostMapping
+    public ResponseEntity<DonanteDto> registrarDonante(@RequestBody DonanteDto donante){
         return new ResponseEntity<>(donanteService.createDonante(donante), HttpStatus.CREATED);
     }
 
     @PutMapping ("/{cedula}")
-    public ResponseEntity<Donante> updateDonante(@PathVariable Integer cedula, @RequestBody Donante donante){
-        return new ResponseEntity<>(donanteService.updateDonante(cedula, donante).orElse(null), HttpStatus.OK);
+    public ResponseEntity<DonanteDto> updateDonante(@PathVariable Integer cedula, @RequestBody DonanteDto donante){
+        return new ResponseEntity<>(donanteService.updateDonante(cedula, donante), HttpStatus.OK);
     }
 
     @DeleteMapping("/{cedula}")
-    public ResponseEntity<Void> deleteDonante(@PathVariable Integer cedula){
+    public ResponseEntity<String> deleteDonante(@PathVariable Integer cedula){
         donanteService.deleteDonante(cedula);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Donante eliminado", HttpStatus.OK);
     }
 
     @GetMapping("/{cedula}")
-    public ResponseEntity<Donante> getDonanteByCedula(@PathVariable Integer cedula){
-        return new ResponseEntity<>(donanteService.getDonanteByCedula(cedula).orElse(null), HttpStatus.OK);
+    public ResponseEntity<DonanteDto> getDonanteByCedula(@PathVariable Integer cedula){
+        return new ResponseEntity<>(donanteService.getDonanteByCedula(cedula), HttpStatus.OK);
     }
 
     @GetMapping("/nombre&apellido")
-    public List<Donante> getDonantesByNombreAndApellido(@RequestParam String nombre, @RequestParam String apellido){
-        return donanteService.getDonantesByNombreAndApellido(nombre, apellido);
+    public ResponseEntity<List<DonanteDto>> getDonantesByNombreAndApellido(@RequestParam String nombre, @RequestParam String apellido){
+        return new ResponseEntity<>(donanteService.getDonantesByNombreAndApellido(nombre, apellido), HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public List<Donante> getAllDonantes(){
-        return donanteService.getAllDonantes();
+    public ResponseEntity<List<DonanteDto>> getAllDonantes(){
+        return new ResponseEntity<>(donanteService.getAllDonantes(), HttpStatus.OK);
     }
 
 }

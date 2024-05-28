@@ -5,31 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "Condiciones Medicas")
+@Table(name = "Condiciones")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class CondicionMedica {
-    @EmbeddedId
-    private CondicionMedicaId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String nombre;
 
-    @ManyToOne
-    @MapsId("adultoMayorCedula")
-    @JoinColumn(name = "adultoMayorCedula")
-    private AdultoMayor adultoMayor;
-
-    @ManyToOne
-    @MapsId("condicionID")
-    @JoinColumn(name = "condicionID")
-    private Condicion condicion;
-}
-@Embeddable
-class CondicionMedicaId implements Serializable {
-    private int adultoMayorCedula;
-    private int condicionID;
+    @ManyToMany(mappedBy = "condicionesMedicas")
+    private List<AdultoMayor> adultosMayores;
 
 }

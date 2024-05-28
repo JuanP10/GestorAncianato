@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,13 +14,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Categoria {
+public class CategoriaMedicamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nombreCat;
 
-    @OneToMany(mappedBy = "categoria")
-    private List<CatMedicamento> catMedicamentos;
+    @ManyToMany(mappedBy = "categoriasMedicamentos")
+    private List<Medicamento> medicamentos;
+
 
 }

@@ -1,20 +1,20 @@
 package com.example.gestorancianato.Services;
 
-import com.example.gestorancianato.Entities.Medicamento;
+
+import com.example.gestorancianato.Dtos.MedicamentoDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MedicamentoService {
-    Optional<Medicamento> getMedicamentoById(Integer id);
-    List<Medicamento> getMedicamentosByCatMedicamentos(String categoria);
+    MedicamentoDto getMedicamentoById(Integer id);
+    List<MedicamentoDto> getMedicamentosByCatMedicamentos(String categoria);
 
-    List<Medicamento> getMedicamentoByDonanteCedula(Integer cedula);
-    List<Medicamento> getMedicamentoByFechaVencimientoMesAndAño(int mes, int año);
-    Medicamento createMedicamento(Medicamento medicamento);
+    List<MedicamentoDto> getMedicamentoByDonanteCedula(Integer cedula);
+    List<MedicamentoDto> getMedicamentoByFechaVencimientoMesAndAño(int mes, int año);
+    MedicamentoDto createMedicamento(MedicamentoDto medicamento);
 
 
-    List<Medicamento> getAllMedicamentos();
-    Optional<Medicamento> updateMedicamento(Integer id, Medicamento medicamento);
+    List<MedicamentoDto> getAllMedicamentos();
+    MedicamentoDto updateMedicamento(Integer id, MedicamentoDto medicamento);
     void deleteMedicamentoById(Integer id);
 }

@@ -1,30 +1,30 @@
 package com.example.gestorancianato.Services;
 
-import com.example.gestorancianato.Entities.Suministro;
 
 
 
+
+import com.example.gestorancianato.Dtos.SuministroDto;
 
 import java.util.List;
 import java.time.LocalDate;
-import java.util.Optional;
 
 
 public interface SuministroService {
 
-    Suministro createSuministro(Suministro suministro);
+    SuministroDto createSuministro(SuministroDto suministro);
 
-    List<Suministro> getAllSuministros();
+    List<SuministroDto> getAllSuministros();
 
-    Optional<Suministro> updateSuministro(Integer id, Suministro suministro);
+    SuministroDto updateSuministro(Integer id, SuministroDto suministro);
 
     void deleteSuministroById(Integer id);
 
-    Optional<Suministro> getSuministroById(Integer id);
+    SuministroDto getSuministroById(Integer id);
 
-    Optional<Suministro> getSuministroByFecha(LocalDate fechaInicio, LocalDate fechaFin);
+    List<SuministroDto> getSuministrosByFecha(LocalDate fechaInicio, LocalDate fechaFin);
 
-    List<Suministro> getSuministroByMedicamento(String medicamento);
+    List<SuministroDto> getSuministrosByMedicamento(String medicamento);
 
-    List<Suministro> getSuministroByAdultoMayor(Integer cedula);
+    List<SuministroDto> getSuministrosByAdultoMayor(Integer cedula);
 }

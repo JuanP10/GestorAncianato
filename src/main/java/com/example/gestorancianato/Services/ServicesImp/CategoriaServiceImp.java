@@ -1,6 +1,6 @@
 package com.example.gestorancianato.Services.ServicesImp;
 
-import com.example.gestorancianato.Entities.Categoria;
+import com.example.gestorancianato.Entities.CategoriaMedicamento;
 import com.example.gestorancianato.Repositories.CategoriaRepository;
 import com.example.gestorancianato.Services.CategoriaService;
 import org.slf4j.Logger;
@@ -24,23 +24,23 @@ public class CategoriaServiceImp implements CategoriaService {
     private static final Logger log = LoggerFactory.getLogger(CategoriaServiceImp.class);
 
     @Override
-    public Optional<Categoria> getCategoriaById(Integer id) {
+    public Optional<CategoriaMedicamento> getCategoriaById(Integer id) {
         return categoriaRepository.findById(id);
     }
 
     @Override
-    public Categoria createCategoria(Categoria categoria) {
-        return categoriaRepository.save(categoria);
+    public CategoriaMedicamento createCategoria(CategoriaMedicamento categoriaMedicamento) {
+        return categoriaRepository.save(categoriaMedicamento);
     }
 
     @Override
-    public Optional<Categoria> updateCategoria(Integer id, Categoria categoria) {
-        Optional<Categoria> optionalCategoria = categoriaRepository.findById(id);
+    public Optional<CategoriaMedicamento> updateCategoria(Integer id, CategoriaMedicamento categoriaMedicamento) {
+        Optional<CategoriaMedicamento> optionalCategoria = categoriaRepository.findById(id);
         if (optionalCategoria.isPresent()) {
-            Categoria existingCategoria = optionalCategoria.get();
-            existingCategoria.setNombreCat(categoria.getNombreCat());
-            existingCategoria.setCatMedicamentos(categoria.getCatMedicamentos());
-            return Optional.of(categoriaRepository.save(existingCategoria));
+            CategoriaMedicamento existingCategoriaMedicamento = optionalCategoria.get();
+            existingCategoriaMedicamento.setNombreCat(categoriaMedicamento.getNombreCat());
+            existingCategoriaMedicamento.setNombreCat(categoriaMedicamento.getNombreCat());
+            return Optional.of(categoriaRepository.save(existingCategoriaMedicamento));
         } else {
             log.error("La categoria con id {} no existe", id);
             return Optional.empty();
@@ -54,7 +54,7 @@ public class CategoriaServiceImp implements CategoriaService {
     }
 
     @Override
-    public List<Categoria> getAllCategorias() {
+    public List<CategoriaMedicamento> getAllCategorias() {
         return categoriaRepository.findAll();
     }
 }

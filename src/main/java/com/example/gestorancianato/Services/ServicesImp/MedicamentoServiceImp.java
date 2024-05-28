@@ -1,6 +1,8 @@
 package com.example.gestorancianato.Services.ServicesImp;
 
+import com.example.gestorancianato.Dtos.MedicamentoDto;
 import com.example.gestorancianato.Entities.Medicamento;
+import com.example.gestorancianato.Mappers.MedicamentoMapper;
 import com.example.gestorancianato.Repositories.MedicamentoRepository;
 import com.example.gestorancianato.Services.MedicamentoService;
 import org.slf4j.Logger;
@@ -16,63 +18,66 @@ import java.util.Optional;
 public class MedicamentoServiceImp implements MedicamentoService {
 
     private final MedicamentoRepository medicamentoRepository;
-    private static final Logger log = LoggerFactory.getLogger(MedicamentoServiceImp.class);
-
-    public MedicamentoServiceImp(MedicamentoRepository medicamentoRepository) {
+    private final MedicamentoMapper medicamentoMapper;
+    public MedicamentoServiceImp(MedicamentoRepository medicamentoRepository, MedicamentoMapper medicamentoMapper) {
         this.medicamentoRepository = medicamentoRepository;
+        this.medicamentoMapper = medicamentoMapper;
     }
 
     @Override
-    public Medicamento createMedicamento(Medicamento medicamento) {
-        return medicamentoRepository.save(medicamento);
+    public MedicamentoDto createMedicamento(MedicamentoDto medicamento) {
+        Medicamento medicamentoToCreate = medicamentoMapper.toMedicamento(medicamento);
+        return medicamentoMapper.toMedicamentoDto(medicamentoRepository.save(medicamentoToCreate));
     }
 
     @Override
-    public Optional<Medicamento> getMedicamentoById(Integer id) {
-        return medicamentoRepository.findById(id);
+    public MedicamentoDto getMedicamentoById(Integer id) {
+        Medicamento medicamento = medicamentoRepository.findById(id).orElseThrow(()->
+                new RuntimeException("Medicamento no encontrado"));
+        return medicamentoMapper.toMedicamentoDto(medicamento);
     }
 
     @Override
-    public List<Medicamento> getMedicamentosByCatMedicamentos(String categoria) {
-        return medicamentoRepository.findByCatMedicamentos(categoria);
+    public List<MedicamentoDto> getMedicamentosByCatMedicamentos(String categoria) {
+        List<Medicamento> medicamentos = medicamentoRepository.findByCatMedicamentos(categoria);
+        return medicamentos.stream().map(medicamentoMapper::toMedicamentoDto).toList();
     }
 
     @Override
-    public List<Medicamento> getMedicamentoByDonanteCedula(Integer cedula) {
-        return medicamentoRepository.findByDonanteCedula(cedula);
+    public List<MedicamentoDto> getMedicamentoByDonanteCedula(Integer cedula) {
+        List<Medicamento> medicamentos = medicamentoRepository.findByDonanteCedula(cedula);
+        return medicamentos.stream().map(medicamentoMapper::toMedicamentoDto).toList();
     }
 
     @Override
-    public List<Medicamento> getMedicamentoByFechaVencimientoMesAndAño(int mes, int año) {
-        return medicamentoRepository.findByFechaVencimientoMesAndAño(mes, año);
+    public List<MedicamentoDto> getMedicamentoByFechaVencimientoMesAndAño(int mes, int año) {
+        List<Medicamento> medicamentos = medicamentoRepository.findByFechaVencimientoMesAndAño(mes, año);
+        return medicamentos.stream().map(medicamentoMapper::toMedicamentoDto).toList();
     }
 
     @Override
-    public List<Medicamento> getAllMedicamentos() {
-        return medicamentoRepository.findAll();
+    public List<MedicamentoDto> getAllMedicamentos() {
+        List<Medicamento> medicamentos = medicamentoRepository.findAll();
+        return medicamentos.stream().map(medicamentoMapper::toMedicamentoDto).toList();
     }
 
     @Override
-    public Optional<Medicamento> updateMedicamento(Integer id, Medicamento medicamento) {
-        Optional<Medicamento> optionalMedicamento = medicamentoRepository.findById(id);
-        if (optionalMedicamento.isPresent()) {
-            Medicamento medicamentoToUpdate = optionalMedicamento.get();
-            medicamentoToUpdate.setNombre(medicamento.getNombre());
-            medicamentoToUpdate.setCantidad(medicamento.getCantidad());
-            medicamentoToUpdate.setCatMedicamentos(medicamento.getCatMedicamentos());
-            medicamentoToUpdate.setSuministros(medicamento.getSuministros());
-            medicamentoToUpdate.setFechaVencimiento(medicamento.getFechaVencimiento());
-            medicamentoToUpdate.setDonante(medicamento.getDonante());
-            return Optional.of(medicamentoRepository.save(medicamentoToUpdate));
-        } else {
-            log.error("El Medicamento con id {} no existe", id);
-            return Optional.empty();
-        }
+    public MedicamentoDto updateMedicamento(Integer id, MedicamentoDto medicamento) {
+        Medicamento medicamentoEntity = medicamentoMapper.toMedicamento(medicamento);
+        Medicamento medicamentoToUpdate = medicamentoRepository.findById(id).map(medicamentoEncontrado -> {
+            medicamentoEncontrado.setNombre(medicamentoEntity.getNombre());
+            medicamentoEncontrado.setFechaVencimiento(medicamentoEntity.getFechaVencimiento());
+            medicamentoEncontrado.setCantidad(medicamentoEntity.getCantidad());
+            return medicamentoRepository.save(medicamentoEncontrado);
+        }).orElseThrow(() -> new RuntimeException("Medicamento no encontrado"));
+        return medicamentoMapper.toMedicamentoDto(medicamentoToUpdate);
     }
 
     @Override
     public void deleteMedicamentoById(Integer id) {
-        medicamentoRepository.deleteById(id);
+        Medicamento medicamento = medicamentoRepository.findById(id).orElseThrow(()->
+                new RuntimeException("Medicamento no encontrado"));
+        medicamentoRepository.delete(medicamento);
     }
 
 

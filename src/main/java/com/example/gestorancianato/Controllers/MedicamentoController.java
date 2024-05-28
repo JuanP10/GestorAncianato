@@ -1,6 +1,6 @@
 package com.example.gestorancianato.Controllers;
 
-import com.example.gestorancianato.Entities.Medicamento;
+import com.example.gestorancianato.Dtos.MedicamentoDto;
 import com.example.gestorancianato.Services.MedicamentoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,45 +18,49 @@ public class MedicamentoController {
         this.medicamentoService = medicamentoService;
     }
 
-    @PostMapping("/Registrar")
-    public ResponseEntity<Medicamento> registrarMedicamento(@RequestBody Medicamento medicamento){
+    @PostMapping
+    public ResponseEntity<MedicamentoDto> registrarMedicamento(@RequestBody MedicamentoDto medicamento){
         return new ResponseEntity<>(medicamentoService.createMedicamento(medicamento), HttpStatus.CREATED);
     }
 
-    @PutMapping("Actualizar/{id}")
-    public ResponseEntity<Medicamento> updateMedicamento(@PathVariable Integer id, @RequestBody Medicamento medicamento){
-        return new ResponseEntity<>(medicamentoService.updateMedicamento(id, medicamento).orElse(null), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<MedicamentoDto> updateMedicamento(@PathVariable Integer id, @RequestBody MedicamentoDto medicamento){
+        return new ResponseEntity<>(medicamentoService.updateMedicamento(id, medicamento), HttpStatus.OK);
     }
 
-    @PostMapping("Eliminar/{id}")
-    public ResponseEntity<Void> deleteMedicamento(@PathVariable Integer id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMedicamento(@PathVariable Integer id){
         medicamentoService.deleteMedicamentoById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Medicamento eliminado", HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Medicamento> getMedicamentoById(@PathVariable Integer id){
-        return new ResponseEntity<>(medicamentoService.getMedicamentoById(id).orElse(null), HttpStatus.OK);
+    public ResponseEntity<MedicamentoDto> getMedicamentoById(@PathVariable Integer id){
+        return new ResponseEntity<>(medicamentoService.getMedicamentoById(id), HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public List<Medicamento> getAllMedicamentos(){
-        return medicamentoService.getAllMedicamentos();
+    public ResponseEntity<List<MedicamentoDto>> getAllMedicamentos(){
+        List<MedicamentoDto> medicamentos = medicamentoService.getAllMedicamentos();
+        return new ResponseEntity<>(medicamentos, HttpStatus.OK);
     }
 
     @GetMapping("/catMedicamentos")
-    public List<Medicamento> getMedicamentosByCatMedicamentos(@RequestParam String catMedicamentos){
-        return medicamentoService.getMedicamentosByCatMedicamentos(catMedicamentos);
+    public ResponseEntity<List<MedicamentoDto>> getMedicamentosByCatMedicamentos(@RequestParam String catMedicamentos){
+        List<MedicamentoDto> medicamentos = medicamentoService.getMedicamentosByCatMedicamentos(catMedicamentos);
+        return new ResponseEntity<>(medicamentos, HttpStatus.OK);
     }
 
     @GetMapping("/donanteCedula")
-    public List<Medicamento> getMedicamentoByDonanteCedula(@RequestParam Integer cedula){
-        return medicamentoService.getMedicamentoByDonanteCedula(cedula);
+    public ResponseEntity<List<MedicamentoDto>> getMedicamentoByDonanteCedula(@RequestParam Integer cedula){
+        List<MedicamentoDto> medicamentos = medicamentoService.getMedicamentoByDonanteCedula(cedula);
+        return new ResponseEntity<>(medicamentos, HttpStatus.OK);
     }
 
     @GetMapping("/fechaVencimiento")
-    public List<Medicamento> getMedicamentoByFechaVencimientoMesAndAño(@RequestParam int mes, @RequestParam int año){
-        return medicamentoService.getMedicamentoByFechaVencimientoMesAndAño(mes, año);
+    public ResponseEntity<List<MedicamentoDto>> getMedicamentoByFechaVencimientoMesAndAño(@RequestParam int mes, @RequestParam int año){
+        List<MedicamentoDto> medicamentos = medicamentoService.getMedicamentoByFechaVencimientoMesAndAño(mes, año);
+        return new ResponseEntity<>(medicamentos, HttpStatus.OK);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.gestorancianato.Controllers;
 
+import com.example.gestorancianato.Dtos.AdultoMayorDto;
 import com.example.gestorancianato.Entities.AdultoMayor;
 import com.example.gestorancianato.Services.AdultoMayorService;
 import org.springframework.http.HttpStatus;
@@ -18,40 +19,41 @@ public class AdultoMayorController {
         this.adultoMayorService = adultoMayorService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<AdultoMayor> createAdultoMayor(@RequestBody AdultoMayor adultoMayor) {
+    @PostMapping()
+    public ResponseEntity<AdultoMayorDto> createAdultoMayor(@RequestBody AdultoMayorDto adultoMayor) {
         return ResponseEntity.ok(adultoMayorService.createAdultoMayor(adultoMayor));
     }
 
     @GetMapping("/all")
-    public List<AdultoMayor> getAllAdultoMayor() {
-        return adultoMayorService.getAllAdultoMayor();
+    public ResponseEntity<List<AdultoMayorDto>> getAllAdultoMayor() {
+        List<AdultoMayorDto> adultoMayorList = adultoMayorService.getAllAdultoMayor();
+        return new ResponseEntity<>(adultoMayorList, HttpStatus.OK);
     }
 
     @PutMapping("/{cedula}")
-    public ResponseEntity<AdultoMayor> updateAdultoMayor(@PathVariable Integer cedula, @RequestBody AdultoMayor adultoMayor) {
-        return new ResponseEntity<>(adultoMayorService.updateAdultoMayor(cedula, adultoMayor).orElse(null), HttpStatus.OK);
+    public ResponseEntity<AdultoMayorDto> updateAdultoMayor(@PathVariable Integer cedula, @RequestBody AdultoMayorDto adultoMayor) {
+        return new ResponseEntity<>(adultoMayorService.updateAdultoMayor(cedula, adultoMayor), HttpStatus.OK);
     }
 
     @DeleteMapping ("/{cedula}")
-    public ResponseEntity<Void> deleteAdultoMayor(@PathVariable Integer cedula) {
+    public ResponseEntity<String> deleteAdultoMayor(@PathVariable Integer cedula) {
         adultoMayorService.deleteAdultoMayor(cedula);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok().body("Adulto Mayor eliminado");
     }
 
     @GetMapping ("/{cedula}")
-    public ResponseEntity<AdultoMayor> getAdultoMayorByCedula(@PathVariable Integer cedula) {
-        return new ResponseEntity<>(adultoMayorService.GetAdultoMayorByCedula(cedula).orElse(null), HttpStatus.OK);
+    public ResponseEntity<AdultoMayorDto> getAdultoMayorByCedula(@PathVariable Integer cedula) {
+        return new ResponseEntity<>(adultoMayorService.getAdultoMayorByCedula(cedula), HttpStatus.OK);
     }
 
     @GetMapping ("/nombre&apellido")
-    public ResponseEntity<List<AdultoMayor>> getAdultoMayorByNombreAndApellido(@RequestParam String nombre, @RequestParam String apellido) {
+    public ResponseEntity<List<AdultoMayorDto>> getAdultoMayorByNombreAndApellido(@RequestParam String nombre, @RequestParam String apellido) {
         return new ResponseEntity<>(adultoMayorService.getAdultoMayorByNombreAndApellido(nombre, apellido), HttpStatus.OK);
     }
 
     @GetMapping ("/{condicionMedica}")
-    public List<AdultoMayor> findByAdultoMayorByCondicionMedica(@PathVariable String CondicionMedica) {
-        return adultoMayorService.findByAdultoMayorByCondicionMedica(CondicionMedica);
+    public ResponseEntity<List<AdultoMayorDto>> findByAdultoMayorByCondicionMedica(@PathVariable String CondicionMedica) {
+        return new ResponseEntity<>(adultoMayorService.findByAdultoMayorByCondicionMedica(CondicionMedica), HttpStatus.OK);
     }
 
 }

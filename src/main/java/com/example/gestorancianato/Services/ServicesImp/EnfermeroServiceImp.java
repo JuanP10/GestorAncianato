@@ -1,67 +1,72 @@
 package com.example.gestorancianato.Services.ServicesImp;
 
 
+import com.example.gestorancianato.Dtos.EnfermeroDto;
 import com.example.gestorancianato.Entities.Enfermero;
+import com.example.gestorancianato.Mappers.EnfermeroMapper;
 import com.example.gestorancianato.Repositories.EnfermeroRepository;
 import com.example.gestorancianato.Services.EnfermeroService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 
 public class EnfermeroServiceImp implements EnfermeroService {
 
     private final EnfermeroRepository enfermeroRepository;
+    private final EnfermeroMapper enfemeroMapper;
 
-    private static final Logger log = LoggerFactory.getLogger(EnfermeroService.class);
-
-    public EnfermeroServiceImp(EnfermeroRepository enfermeroRepository) {
+    public EnfermeroServiceImp(EnfermeroRepository enfermeroRepository, EnfermeroMapper enfemeroMapper) {
         this.enfermeroRepository = enfermeroRepository;
+        this.enfemeroMapper = enfemeroMapper;
     }
 
 
     @Override
-    public Enfermero createEnfermero(Enfermero enfermero) { return enfermeroRepository.save(enfermero); }
-
-    @Override
-    public List<Enfermero> getAllEnfermeros() {
-        return enfermeroRepository.findAll();
+    public EnfermeroDto createEnfermero(EnfermeroDto enfermero) {
+        Enfermero enfermeroEntity = enfemeroMapper.toEnfermero(enfermero);
+        return enfemeroMapper.toEnfermeroDto(enfermeroRepository.save(enfermeroEntity));
     }
 
     @Override
-    public List<Enfermero> getEnfermeroByCedula(Integer cedula) {
-        return enfermeroRepository.findByCedula(cedula);
+    public List<EnfermeroDto> getAllEnfermeros() {
+        List<Enfermero> enfermeros = enfermeroRepository.findAll();
+        return enfermeros.stream().map(enfemeroMapper::toEnfermeroDto).toList();
     }
 
     @Override
-    public Optional<Enfermero> updateEnfermero(Integer cedula, Enfermero enfermero) {
-        Optional<Enfermero> optionalEnfermero = enfermeroRepository.findById(cedula);
-        if (optionalEnfermero.isPresent()) {
-            Enfermero enfermeroToUpdate = optionalEnfermero.get();
-            enfermeroToUpdate.setNombre(enfermero.getNombre());
-            enfermeroToUpdate.setApellido(enfermero.getApellido());
-            enfermeroToUpdate.setContrasena(enfermero.getContrasena());
-            enfermeroToUpdate.setCedula(enfermero.getCedula());
-            enfermeroToUpdate.setRol(enfermero.getRol());
-            return Optional.of(enfermeroRepository.save(enfermeroToUpdate));
-        } else {
-            log.error("El Enfermero con cedula {} no existe", cedula);
-            return Optional.empty();
-        }
+    public List<EnfermeroDto> getEnfermeroByCedula(Integer cedula) {
+       List<Enfermero> enfermeros = enfermeroRepository.findByCedula(cedula);
+       return enfermeros.stream().map(enfemeroMapper::toEnfermeroDto).toList();
     }
 
     @Override
-    public void deleteEnfermero(Integer cedula) { enfermeroRepository.deleteById(cedula);
+    public EnfermeroDto updateEnfermero(Integer cedula, EnfermeroDto enfermero) {
+        Enfermero enfermeroEntity = enfemeroMapper.toEnfermero(enfermero);
+        Enfermero enfermeroToUpdate = enfermeroRepository.findById(cedula).map(enfermeroEncontrado -> {
+            enfermeroEncontrado.setNombre(enfermeroEntity.getNombre());
+            enfermeroEncontrado.setApellido(enfermeroEntity.getApellido());
+            enfermeroEncontrado.setRol(enfermeroEntity.getRol());
+            enfermeroEncontrado.setContrasena(enfermeroEntity.getContrasena();
+            return enfermeroRepository.save(enfermeroEncontrado);
+        }).orElseThrow(() -> new RuntimeException("Enfermero no encontrado"));
+
+        return enfemeroMapper.toEnfermeroDto(enfermeroToUpdate);
 
     }
 
     @Override
-    public List<Enfermero> getEnfermeroByNombreAndApellido(String nombre, String apellido) {
-        return enfermeroRepository.findByNombreOrApellido(nombre, apellido);
+    public void deleteEnfermero(Integer cedula) {
+        Enfermero enfermero = enfermeroRepository.findById(cedula).orElseThrow(() -> new RuntimeException("Enfermero no encontrado"));
+        enfermeroRepository.deleteById(cedula);
+    }
+
+    @Override
+    public List<EnfermeroDto> getEnfermeroByNombreAndApellido(String nombre, String apellido) {
+        List<Enfermero> enfermeros = enfermeroRepository.findByNombreOrApellido(nombre, apellido);
+        return enfermeros.stream().map(enfemeroMapper::toEnfermeroDto).toList();
     }
 }
 

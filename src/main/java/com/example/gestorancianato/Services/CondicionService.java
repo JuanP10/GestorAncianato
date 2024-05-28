@@ -1,19 +1,19 @@
 package com.example.gestorancianato.Services;
 
-import com.example.gestorancianato.Entities.Condicion;
+import com.example.gestorancianato.Entities.CondicionMedica;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CondicionService {
-    Optional<Condicion> getCondicionById(Integer id);
-    Condicion createCondicion(Condicion condicion);
-    Optional<Condicion> updateCondicion(Integer id, Condicion condicion);
+    Optional<CondicionMedica> getCondicionById(Integer id);
+    CondicionMedica createCondicion(CondicionMedica condicionMedica);
+    Optional<CondicionMedica> updateCondicion(Integer id, CondicionMedica condicionMedica);
 
     void deleteCondicionById(Integer id);
-    List<Condicion> getAllCondiciones();
+    List<CondicionMedica> getAllCondiciones();
 
-    Optional<Condicion> getCondicionByNombre(String nombre);
+    Optional<CondicionMedica> getCondicionByNombre(String nombre);
 
 
 }

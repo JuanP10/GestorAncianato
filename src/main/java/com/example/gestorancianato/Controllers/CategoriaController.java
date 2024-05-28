@@ -1,6 +1,6 @@
 package com.example.gestorancianato.Controllers;
 
-import com.example.gestorancianato.Entities.Categoria;
+import com.example.gestorancianato.Entities.CategoriaMedicamento;
 import com.example.gestorancianato.Services.CategoriaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +18,13 @@ public class CategoriaController {
     }
 
     @PostMapping("/Registrar")
-    public ResponseEntity<Categoria> registrarCategoria(@RequestBody Categoria categoria){
-        return new ResponseEntity<>(categoriaService.createCategoria(categoria), HttpStatus.CREATED);
+    public ResponseEntity<CategoriaMedicamento> registrarCategoria(@RequestBody CategoriaMedicamento categoriaMedicamento){
+        return new ResponseEntity<>(categoriaService.createCategoria(categoriaMedicamento), HttpStatus.CREATED);
     }
 
     @PutMapping("Actualizar/{id}")
-    public ResponseEntity<Categoria> updateCategoria(@PathVariable Integer id, @RequestBody Categoria categoria){
-        return new ResponseEntity<>(categoriaService.updateCategoria(id, categoria).orElse(null), HttpStatus.OK);
+    public ResponseEntity<CategoriaMedicamento> updateCategoria(@PathVariable Integer id, @RequestBody CategoriaMedicamento categoriaMedicamento){
+        return new ResponseEntity<>(categoriaService.updateCategoria(id, categoriaMedicamento).orElse(null), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -34,12 +34,12 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> getCategoriaById(@PathVariable Integer id){
+    public ResponseEntity<CategoriaMedicamento> getCategoriaById(@PathVariable Integer id){
         return new ResponseEntity<>(categoriaService.getCategoriaById(id).orElse(null), HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public List<Categoria> getAllCategorias(){
+    public List<CategoriaMedicamento> getAllCategorias(){
         return categoriaService.getAllCategorias();
     }
 

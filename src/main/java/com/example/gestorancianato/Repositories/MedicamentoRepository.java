@@ -1,6 +1,6 @@
 package com.example.gestorancianato.Repositories;
 
-import com.example.gestorancianato.Entities.Categoria;
+import com.example.gestorancianato.Dtos.MedicamentoDto;
 import com.example.gestorancianato.Entities.Medicamento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface MedicamentoRepository extends JpaRepository<Medicamento, String> {
     Optional<Medicamento> findById (Integer id);
 
-    @Query("SELECT m FROM Medicamento m JOIN m.catMedicamentos cm WHERE cm.categoria = :categoria")
+    @Query("SELECT m FROM Medicamento m JOIN m.categoriasMedicamentos cm WHERE cm.nombreCat = :categoria")
     List<Medicamento> findByCatMedicamentos(@Param("categoria") String categoria);
 
     @Query("SELECT m FROM Medicamento m WHERE m.donante.cedula = :cedula")

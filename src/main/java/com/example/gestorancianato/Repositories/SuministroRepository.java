@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface SuministroRepository extends JpaRepository<Suministro, Integer> {
-    Optional<Suministro> findByFechaSuministroBetween(LocalDate startDate, LocalDate endDate);
+    List<Suministro> findByFechaSuministroBetween(LocalDate startDate, LocalDate endDate);
 
     //Este es para listar los suministros por adulto mayor
     List<Suministro> findSuministrosByAdultoMayor_Cedula(Integer cedula);

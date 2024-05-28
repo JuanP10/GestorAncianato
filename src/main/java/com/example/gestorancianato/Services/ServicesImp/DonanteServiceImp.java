@@ -1,6 +1,8 @@
 package com.example.gestorancianato.Services.ServicesImp;
 
+import com.example.gestorancianato.Dtos.DonanteDto;
 import com.example.gestorancianato.Entities.Donante;
+import com.example.gestorancianato.Mappers.DonanteMapper;
 import com.example.gestorancianato.Repositories.DonanteRepository;
 import com.example.gestorancianato.Services.DonanteService;
 import org.slf4j.LoggerFactory;
@@ -14,51 +16,54 @@ import java.util.Optional;
 public class DonanteServiceImp  implements DonanteService{
 
     private final  DonanteRepository donanteRepository;
-    private static final Logger log = LoggerFactory.getLogger(DonanteServiceImp.class);
+    private final DonanteMapper donanteMapper;
 
-
-    public DonanteServiceImp(DonanteRepository donanteRepository) {
+    public DonanteServiceImp(DonanteRepository donanteRepository, DonanteMapper donanteMapper) {
         this.donanteRepository = donanteRepository;
+        this.donanteMapper = donanteMapper;
     }
 
     @Override
-    public Donante createDonante(Donante donante) {
-        return donanteRepository.save(donante);
+    public DonanteDto createDonante (DonanteDto donante) {
+        Donante donanteToSave = donanteMapper.toDonante(donante);
+        return donanteMapper.toDonanteDto(donanteRepository.save(donanteToSave));
     }
 
     @Override
-    public List<Donante> getAllDonantes() {
-        return donanteRepository.findAll();
+    public List<DonanteDto> getAllDonantes() {
+        List<Donante> donantes = donanteRepository.findAll();
+        return donantes.stream().map(donanteMapper::toDonanteDto).toList();
     }
 
     @Override
-    public Optional<Donante> getDonanteByCedula(Integer cedula) {
-        return donanteRepository.findByCedula(cedula);
+    public DonanteDto getDonanteByCedula(Integer cedula) {
+        Donante donante = donanteRepository.findById(cedula).orElseThrow(() -> new RuntimeException("Donante no encontrado"));
+        return donanteMapper.toDonanteDto(donante);
     }
 
     @Override
-    public Optional<Donante> updateDonante(Integer cedula, Donante donante) {
-        Optional<Donante> optionalDonante = donanteRepository.findById(cedula);
-        if (optionalDonante.isPresent()) {
-            Donante donanteToUpdate = optionalDonante.get();
-            donanteToUpdate.setNombre(donante.getNombre());
-            donanteToUpdate.setApellido(donante.getApellido());
-            donanteToUpdate.setTelefono(donante.getTelefono());
-            donanteToUpdate.setDireccion(donante.getDireccion());
-            return Optional.of(donanteRepository.save(donanteToUpdate));
-        } else {
-            log.error("El Donante con cedula {} no existe", cedula);
-            return Optional.empty();
-        }
+    public DonanteDto updateDonante(Integer cedula, DonanteDto donante) {
+        Donante donanteToUpdate = donanteMapper.toDonante(donante);
+        Donante donanteInDb = donanteRepository.findById(cedula).map(donante1 -> {
+            donante1.setNombre(donanteToUpdate.getNombre());
+            donante1.setApellido(donanteToUpdate.getApellido());
+            donante1.setDireccion(donanteToUpdate.getDireccion());
+            donante1.setTelefono(donanteToUpdate.getTelefono());
+            return donanteRepository.save(donante1);
+        }).orElseThrow(() -> new RuntimeException("Donante no encontrado"));
+
+        return donanteMapper.toDonanteDto(donanteInDb);
     }
 
     @Override
     public void deleteDonante(Integer cedula) {
-        donanteRepository.deleteById(cedula);
+        Donante donante = donanteRepository.findById(cedula).orElseThrow(() -> new RuntimeException("Donante no encontrado"));
+        donanteRepository.delete(donante);
     }
 
     @Override
-    public List<Donante> getDonantesByNombreAndApellido(String nombre, String apellido) {
-        return donanteRepository.findByNombreOrApellido(nombre, apellido);
+    public List<DonanteDto> getDonantesByNombreAndApellido(String nombre, String apellido) {
+        List<Donante> donantes = donanteRepository.findByNombreOrApellido(nombre, apellido);
+        return donantes.stream().map(donanteMapper::toDonanteDto).toList();
     }
 }

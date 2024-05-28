@@ -1,9 +1,7 @@
 package com.example.gestorancianato.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,8 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 
 public class Donante {
-    @Id
-    private Integer cedula;
+    @Id @Column(unique = true) private Integer cedula;
     private String nombre;
     private String apellido;
     private Long telefono;
