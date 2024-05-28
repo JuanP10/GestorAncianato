@@ -2,14 +2,12 @@ package com.example.gestorancianato.Controllers;
 
 
 import com.example.gestorancianato.Dtos.EnfermeroDto;
-import com.example.gestorancianato.Entities.Enfermero;
 import com.example.gestorancianato.Services.EnfermeroService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/Enfermero")

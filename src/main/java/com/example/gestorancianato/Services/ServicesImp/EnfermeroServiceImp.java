@@ -49,7 +49,7 @@ public class EnfermeroServiceImp implements EnfermeroService {
             enfermeroEncontrado.setNombre(enfermeroEntity.getNombre());
             enfermeroEncontrado.setApellido(enfermeroEntity.getApellido());
             enfermeroEncontrado.setRol(enfermeroEntity.getRol());
-            enfermeroEncontrado.setContrasena(enfermeroEntity.getContrasena();
+            enfermeroEncontrado.setContrasena(enfermeroEntity.getContrasena());
             return enfermeroRepository.save(enfermeroEncontrado);
         }).orElseThrow(() -> new RuntimeException("Enfermero no encontrado"));
 

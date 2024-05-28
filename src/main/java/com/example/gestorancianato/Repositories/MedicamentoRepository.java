@@ -1,6 +1,5 @@
 package com.example.gestorancianato.Repositories;
 
-import com.example.gestorancianato.Dtos.MedicamentoDto;
 import com.example.gestorancianato.Entities.Medicamento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,5 +23,4 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, String
     @Query("SELECT m FROM Medicamento m WHERE MONTH(m.fechaVencimiento) = :mes AND YEAR(m.fechaVencimiento) = :año")
     List<Medicamento> findByFechaVencimientoMesAndAño(@Param("mes") int mes, @Param("año") int año);
 
-    void deleteById(Integer id);
 }

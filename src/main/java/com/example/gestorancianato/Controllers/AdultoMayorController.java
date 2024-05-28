@@ -1,7 +1,6 @@
 package com.example.gestorancianato.Controllers;
 
 import com.example.gestorancianato.Dtos.AdultoMayorDto;
-import com.example.gestorancianato.Entities.AdultoMayor;
 import com.example.gestorancianato.Services.AdultoMayorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +50,7 @@ public class AdultoMayorController {
         return new ResponseEntity<>(adultoMayorService.getAdultoMayorByNombreAndApellido(nombre, apellido), HttpStatus.OK);
     }
 
-    @GetMapping ("/{condicionMedica}")
+    @GetMapping ("/{CondicionMedica}")
     public ResponseEntity<List<AdultoMayorDto>> findByAdultoMayorByCondicionMedica(@PathVariable String CondicionMedica) {
         return new ResponseEntity<>(adultoMayorService.findByAdultoMayorByCondicionMedica(CondicionMedica), HttpStatus.OK);
     }
