@@ -5,23 +5,26 @@ import com.example.gestorancianato.Entities.Donante;
 import com.example.gestorancianato.Mappers.DonanteMapper;
 import com.example.gestorancianato.Repositories.DonanteRepository;
 import com.example.gestorancianato.Services.DonanteService;
+import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import org.slf4j.Logger;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class DonanteServiceImp  implements DonanteService{
 
     private final  DonanteRepository donanteRepository;
     private final DonanteMapper donanteMapper;
 
-    public DonanteServiceImp(DonanteRepository donanteRepository, DonanteMapper donanteMapper) {
-        this.donanteRepository = donanteRepository;
-        this.donanteMapper = donanteMapper;
-    }
+    private static final Logger log = LoggerFactory.getLogger(DonanteServiceImp.class);
 
     @Override
     public DonanteDto createDonante (DonanteDto donante) {
@@ -32,38 +35,52 @@ public class DonanteServiceImp  implements DonanteService{
     @Override
     public List<DonanteDto> getAllDonantes() {
         List<Donante> donantes = donanteRepository.findAll();
-        return donantes.stream().map(donanteMapper::toDonanteDto).toList();
+        return donantes.stream().map(donanteMapper::toDonanteDto).collect(Collectors.toList());
     }
 
     @Override
-    public DonanteDto getDonanteByCedula(Integer cedula) {
-        Donante donante = donanteRepository.findById(cedula).orElseThrow(() -> new RuntimeException("Donante no encontrado"));
-        return donanteMapper.toDonanteDto(donante);
+    public Optional<DonanteDto> getDonanteByCedula(Integer cedula) {
+        Optional<Donante> donante = donanteRepository.findById(cedula);
+        if (donante.isPresent())
+            return donante.map(donanteMapper::toDonanteDto);
+        throw new RuntimeException("Donante con la cedula " + cedula + " no encontrado");
+    }
+
+
+    @Override
+    public Optional<DonanteDto> updateDonante(Integer cedula, Donante donante) {
+        Optional<Donante> donanteOptional = donanteRepository.findById(cedula);
+        if (donanteOptional != null){
+            Donante updatedDonante = donanteOptional.get().updateDonante(donante);
+            donanteRepository.save(updatedDonante);
+            return Optional.of(donanteMapper.toDonanteDto(updatedDonante));
+        }else{
+            DonanteDto donanteDto = donanteMapper.toDonanteDto(donanteRepository.save(donante));
+            return Optional.ofNullable(donanteDto) ;
+        }
     }
 
     @Override
-    public DonanteDto updateDonante(Integer cedula, DonanteDto donante) {
-        Donante donanteToUpdate = donanteMapper.toDonante(donante);
-        Donante donanteInDb = donanteRepository.findById(cedula).map(donante1 -> {
-            donante1.setNombre(donanteToUpdate.getNombre());
-            donante1.setApellido(donanteToUpdate.getApellido());
-            donante1.setDireccion(donanteToUpdate.getDireccion());
-            donante1.setTelefono(donanteToUpdate.getTelefono());
-            return donanteRepository.save(donante1);
-        }).orElseThrow(() -> new RuntimeException("Donante no encontrado"));
+    public ResponseEntity<String> deleteDonante(Integer cedula) {
+       try {
+              donanteRepository.deleteById(cedula);
+              log.info("El donante con cedula {} ha sido eliminado", cedula);
+                return ResponseEntity.ok("Donante eliminado");
+       } catch (EmptyResultDataAccessException e){
+           log.warn("El donante con cedula {} no existe", cedula);
+              return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El donante con cedula " + cedula + " no existe");
+       } catch (Exception e){
+           log.error("Error al eliminar el donante con cedula {}", cedula, e);
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el donante con cedula " + cedula);
+       }
 
-        return donanteMapper.toDonanteDto(donanteInDb);
     }
 
     @Override
-    public void deleteDonante(Integer cedula) {
-        Donante donante = donanteRepository.findById(cedula).orElseThrow(() -> new RuntimeException("Donante no encontrado"));
-        donanteRepository.delete(donante);
-    }
-
-    @Override
-    public List<DonanteDto> getDonantesByNombreAndApellido(String nombre, String apellido) {
-        List<Donante> donantes = donanteRepository.findByNombreOrApellido(nombre, apellido);
-        return donantes.stream().map(donanteMapper::toDonanteDto).toList();
+    public Optional<DonanteDto> getDonantesByNombreAndApellido(String nombre, String apellido) {
+        Optional<Donante> donante = donanteRepository.findByNombreOrApellido(nombre, apellido);
+        if(donante.isEmpty())
+            throw new RuntimeException("Donante con nombre " + nombre + " y apellido " + apellido + " no encontrado");
+        return donante.map(donanteMapper::toDonanteDto);
     }
 }

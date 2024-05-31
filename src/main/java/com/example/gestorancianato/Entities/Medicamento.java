@@ -1,5 +1,6 @@
 package com.example.gestorancianato.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Medicamento {
 
     @ManyToOne
     @JoinColumn(name = "donanteID")
+    @JsonBackReference
     private Donante donante;
 
     @ManyToMany
@@ -35,6 +37,9 @@ public class Medicamento {
     @OneToMany(mappedBy = "medicamento")
     private List<Suministro> suministros;
 
+    public Medicamento updateMedicamento (Medicamento medicamento){
+        return new Medicamento(medicamento.getId(), medicamento.getNombre(), medicamento.getCantidad(), medicamento.getFechaVencimiento(), medicamento.getDonante(), medicamento.getCategoriasMedicamentos(), medicamento.getSuministros());
+    }
 }
 
 

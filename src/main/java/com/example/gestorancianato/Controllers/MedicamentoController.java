@@ -1,12 +1,17 @@
 package com.example.gestorancianato.Controllers;
 
 import com.example.gestorancianato.Dtos.MedicamentoDto;
+import com.example.gestorancianato.Entities.Medicamento;
 import com.example.gestorancianato.Services.MedicamentoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/Medicamento")
@@ -19,14 +24,27 @@ public class MedicamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<MedicamentoDto> registrarMedicamento(@RequestBody MedicamentoDto medicamento){
-        return new ResponseEntity<>(medicamentoService.createMedicamento(medicamento), HttpStatus.CREATED);
+    public ResponseEntity<MedicamentoDto> registrarMedicamento(@RequestBody @Validated MedicamentoDto medicamento) {
+        try {
+            MedicamentoDto createdMedicamento = medicamentoService.createMedicamento(medicamento);
+            return new ResponseEntity<>(createdMedicamento, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
-
+    /*
     @PutMapping("/{id}")
     public ResponseEntity<MedicamentoDto> updateMedicamento(@PathVariable Integer id, @RequestBody MedicamentoDto medicamento){
-        return new ResponseEntity<>(medicamentoService.updateMedicamento(id, medicamento), HttpStatus.OK);
+        try {
+            Optional<MedicamentoDto> updatedMedicamento = medicamentoService.updateMedicamento(id, medicamento);
+            return updatedMedicamento.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+                    .orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
+
+     */
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteMedicamento(@PathVariable Integer id){
@@ -41,8 +59,7 @@ public class MedicamentoController {
 
     @GetMapping("/all")
     public ResponseEntity<List<MedicamentoDto>> getAllMedicamentos(){
-        List<MedicamentoDto> medicamentos = medicamentoService.getAllMedicamentos();
-        return new ResponseEntity<>(medicamentos, HttpStatus.OK);
+        return new ResponseEntity<>(medicamentoService.getAllMedicamentos(), HttpStatus.OK);
     }
 
     @GetMapping("/catMedicamentos")

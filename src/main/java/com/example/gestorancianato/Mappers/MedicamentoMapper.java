@@ -8,4 +8,5 @@ import org.mapstruct.Mapper;
 public interface MedicamentoMapper {
     MedicamentoDto toMedicamentoDto (Medicamento medicamento);
     Medicamento toMedicamento (MedicamentoDto medicamentoDto);
+
 }

@@ -2,8 +2,10 @@ package com.example.gestorancianato.Services;
 
 
 import com.example.gestorancianato.Dtos.MedicamentoDto;
+import com.example.gestorancianato.Entities.Medicamento;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MedicamentoService {
     MedicamentoDto getMedicamentoById(Integer id);
@@ -15,6 +17,6 @@ public interface MedicamentoService {
 
 
     List<MedicamentoDto> getAllMedicamentos();
-    MedicamentoDto updateMedicamento(Integer id, MedicamentoDto medicamento);
+    Optional<MedicamentoDto> updateMedicamento(Integer id, Medicamento medicamento);
     void deleteMedicamentoById(Integer id);
 }

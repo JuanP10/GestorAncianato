@@ -1,18 +1,21 @@
 package com.example.gestorancianato.Services;
 
 import com.example.gestorancianato.Dtos.DonanteDto;
+import com.example.gestorancianato.Entities.Donante;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DonanteService {
     DonanteDto createDonante (DonanteDto donante);
 
     List<DonanteDto> getAllDonantes();
-    DonanteDto getDonanteByCedula(Integer cedula);
-    DonanteDto updateDonante(Integer cedula, DonanteDto donante);
+    Optional<DonanteDto> getDonanteByCedula(Integer cedula);
+    Optional<DonanteDto> updateDonante(Integer cedula, Donante donante);
 
-    void deleteDonante(Integer cedula);
+    ResponseEntity<String> deleteDonante(Integer cedula);
 
-    List<DonanteDto> getDonantesByNombreAndApellido(String nombre, String apellido);
+    Optional<DonanteDto> getDonantesByNombreAndApellido(String nombre, String apellido);
 
 }

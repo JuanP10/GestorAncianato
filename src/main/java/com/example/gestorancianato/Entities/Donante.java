@@ -1,5 +1,6 @@
 package com.example.gestorancianato.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,10 @@ public class Donante {
     private String direccion;
 
     @OneToMany(mappedBy = "donante")
+    @JsonManagedReference
     private List<Medicamento> medicamentos;
+
+    public Donante updateDonante (Donante donante){
+        return new Donante(donante.getCedula(), donante.getNombre(), donante.getApellido(), donante.getTelefono(), donante.getDireccion(), donante.getMedicamentos());
+    }
 }

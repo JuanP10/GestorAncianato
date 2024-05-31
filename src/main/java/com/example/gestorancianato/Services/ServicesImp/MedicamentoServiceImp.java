@@ -1,34 +1,54 @@
 package com.example.gestorancianato.Services.ServicesImp;
 
+import com.example.gestorancianato.Dtos.DonanteDto;
 import com.example.gestorancianato.Dtos.MedicamentoDto;
+import com.example.gestorancianato.Entities.Donante;
 import com.example.gestorancianato.Entities.Medicamento;
+import com.example.gestorancianato.Exepciones.DonanteNotFoundException;
 import com.example.gestorancianato.Mappers.MedicamentoMapper;
+import com.example.gestorancianato.Repositories.DonanteRepository;
 import com.example.gestorancianato.Repositories.MedicamentoRepository;
 import com.example.gestorancianato.Services.MedicamentoService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MedicamentoServiceImp implements MedicamentoService {
 
     private final MedicamentoRepository medicamentoRepository;
     private final MedicamentoMapper medicamentoMapper;
-    public MedicamentoServiceImp(MedicamentoRepository medicamentoRepository, MedicamentoMapper medicamentoMapper) {
+    private final DonanteRepository donanteRepository;
+    public MedicamentoServiceImp(MedicamentoRepository medicamentoRepository, MedicamentoMapper medicamentoMapper, DonanteRepository donanteRepository) {
         this.medicamentoRepository = medicamentoRepository;
         this.medicamentoMapper = medicamentoMapper;
+        this.donanteRepository = donanteRepository;
     }
 
     @Override
-    public MedicamentoDto createMedicamento(MedicamentoDto medicamento) {
-        Medicamento medicamentoToCreate = medicamentoMapper.toMedicamento(medicamento);
-        return medicamentoMapper.toMedicamentoDto(medicamentoRepository.save(medicamentoToCreate));
+    public MedicamentoDto createMedicamento(MedicamentoDto medicamentoDto) {
+        String cedulaDonante = medicamentoDto.getCedulaDonante();
+        Optional<Donante> optionalDonante = donanteRepository.findById(Integer.valueOf(cedulaDonante));
+
+        if (optionalDonante.isEmpty()) {
+            throw new DonanteNotFoundException("No hay donante con cedula: " + cedulaDonante);
+        }
+
+        Donante donante = optionalDonante.get();
+        Medicamento medicamento = medicamentoMapper.toMedicamento(medicamentoDto);
+        medicamento.setDonante(donante);
+
+        Medicamento savedMedicamento = medicamentoRepository.save(medicamento);
+        MedicamentoDto savedMedicamentoDTO = medicamentoMapper.toMedicamentoDto(savedMedicamento);
+
+        // Set the full Donante details in the response DTO
+        savedMedicamentoDTO.setCedulaDonante(String.valueOf(donante.getCedula()));
+
+        return savedMedicamentoDTO;
     }
+
 
     @Override
     public MedicamentoDto getMedicamentoById(Integer id) {
@@ -57,20 +77,24 @@ public class MedicamentoServiceImp implements MedicamentoService {
 
     @Override
     public List<MedicamentoDto> getAllMedicamentos() {
-        List<Medicamento> medicamentos = medicamentoRepository.findAll();
-        return medicamentos.stream().map(medicamentoMapper::toMedicamentoDto).toList();
+        return medicamentoRepository.findAll()
+                .stream()
+                .map(medicamentoMapper::toMedicamentoDto)
+                .collect(Collectors.toList());
     }
 
+
     @Override
-    public MedicamentoDto updateMedicamento(Integer id, MedicamentoDto medicamento) {
-        Medicamento medicamentoEntity = medicamentoMapper.toMedicamento(medicamento);
-        Medicamento medicamentoToUpdate = medicamentoRepository.findById(id).map(medicamentoEncontrado -> {
-            medicamentoEncontrado.setNombre(medicamentoEntity.getNombre());
-            medicamentoEncontrado.setFechaVencimiento(medicamentoEntity.getFechaVencimiento());
-            medicamentoEncontrado.setCantidad(medicamentoEntity.getCantidad());
-            return medicamentoRepository.save(medicamentoEncontrado);
-        }).orElseThrow(() -> new RuntimeException("Medicamento no encontrado"));
-        return medicamentoMapper.toMedicamentoDto(medicamentoToUpdate);
+    public Optional<MedicamentoDto> updateMedicamento(Integer id, Medicamento medicamento) {
+        Optional<Medicamento> medicamentoOptional = medicamentoRepository.findById(id);
+        if(medicamentoOptional != null){
+            Medicamento updatedMedicamento = medicamentoOptional.get().updateMedicamento(medicamento);
+            medicamentoRepository.save(updatedMedicamento);
+            return Optional.of(medicamentoMapper.toMedicamentoDto(updatedMedicamento));
+        }else{
+            MedicamentoDto medicamentoDto = medicamentoMapper.toMedicamentoDto(medicamentoRepository.save(medicamento));
+            return Optional.ofNullable(medicamentoDto) ;
+        }
     }
 
     @Override

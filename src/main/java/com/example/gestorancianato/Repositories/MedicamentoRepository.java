@@ -11,8 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface MedicamentoRepository extends JpaRepository<Medicamento, String> {
-    Optional<Medicamento> findById (Integer id);
-
     @Query("SELECT m FROM Medicamento m JOIN m.categoriasMedicamentos cm WHERE cm.nombreCat = :categoria")
     List<Medicamento> findByCatMedicamentos(@Param("categoria") String categoria);
 
@@ -23,4 +21,5 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, String
     @Query("SELECT m FROM Medicamento m WHERE MONTH(m.fechaVencimiento) = :mes AND YEAR(m.fechaVencimiento) = :año")
     List<Medicamento> findByFechaVencimientoMesAndAño(@Param("mes") int mes, @Param("año") int año);
 
+    Optional<Medicamento> findById(Integer id);
 }
