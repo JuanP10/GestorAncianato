@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class Suministro{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private int cantidad;
     private LocalDate fechaSuministro;
 

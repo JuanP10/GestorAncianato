@@ -24,13 +24,13 @@ public class CondicionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity <CondicionMedicaDto> updateCondicion (@PathVariable Integer id, @RequestBody CondicionMedicaDto condicionMedica){
+    public ResponseEntity <CondicionMedicaDto> updateCondicion (@PathVariable Long id, @RequestBody CondicionMedicaDto condicionMedica){
         CondicionMedicaDto condicionMedicaDto = condicionMedicaService.updateCondicion(id, condicionMedica);
         return new ResponseEntity<>(condicionMedicaDto, HttpStatus.OK);
     }
 
     @DeleteMapping ("/{id}")
-    public ResponseEntity <String> deleteCondicion (@PathVariable Integer id){
+    public ResponseEntity <String> deleteCondicion (@PathVariable Long id){
         condicionMedicaService.deleteCondicionById(id);
         return new ResponseEntity<>("Condicion Medica eliminada", HttpStatus.OK);
     }
@@ -42,7 +42,7 @@ public class CondicionController {
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity <CondicionMedicaDto> getCondicionById (@PathVariable Integer id){
+    public ResponseEntity <CondicionMedicaDto> getCondicionById (@PathVariable Long id){
         CondicionMedicaDto condicionMedicaDto = condicionMedicaService.getCondicionById(id);
         return new ResponseEntity<>(condicionMedicaDto, HttpStatus.OK);
     }

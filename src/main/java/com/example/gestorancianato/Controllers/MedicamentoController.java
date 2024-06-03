@@ -1,15 +1,14 @@
 package com.example.gestorancianato.Controllers;
 
 import com.example.gestorancianato.Dtos.MedicamentoDto;
-import com.example.gestorancianato.Entities.Medicamento;
+import com.example.gestorancianato.Exepciones.CategoriaMedicamentoNotFoundException;
+import com.example.gestorancianato.Exepciones.DonanteNotFoundException;
 import com.example.gestorancianato.Services.MedicamentoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,42 +23,36 @@ public class MedicamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<MedicamentoDto> registrarMedicamento(@RequestBody @Validated MedicamentoDto medicamento) {
-        try {
-            MedicamentoDto createdMedicamento = medicamentoService.createMedicamento(medicamento);
-            return new ResponseEntity<>(createdMedicamento, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-    }
-    /*
-    @PutMapping("/{id}")
-    public ResponseEntity<MedicamentoDto> updateMedicamento(@PathVariable Integer id, @RequestBody MedicamentoDto medicamento){
-        try {
-            Optional<MedicamentoDto> updatedMedicamento = medicamentoService.updateMedicamento(id, medicamento);
-            return updatedMedicamento.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
-                    .orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<MedicamentoDto> createMedicamento(@RequestBody MedicamentoDto medicamentoDto) {
+        MedicamentoDto createdMedicamento = medicamentoService.createMedicamento(medicamentoDto);
+        return new ResponseEntity<>(createdMedicamento, HttpStatus.CREATED);
     }
 
-     */
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MedicamentoDto> updateMedicamento(@PathVariable Long id, @RequestBody MedicamentoDto medicamentoDto) {
+        MedicamentoDto updatedMedicamento = medicamentoService.updateMedicamento(id, medicamentoDto);
+        return new ResponseEntity<>(updatedMedicamento, HttpStatus.OK);
+    }
+
+
+
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMedicamento(@PathVariable Integer id){
+    public ResponseEntity<String> deleteMedicamento(@PathVariable Long id){
         medicamentoService.deleteMedicamentoById(id);
         return new ResponseEntity<>("Medicamento eliminado", HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MedicamentoDto> getMedicamentoById(@PathVariable Integer id){
+    public ResponseEntity<MedicamentoDto> getMedicamentoById(@PathVariable Long id){
         return new ResponseEntity<>(medicamentoService.getMedicamentoById(id), HttpStatus.OK);
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<MedicamentoDto>> getAllMedicamentos(){
-        return new ResponseEntity<>(medicamentoService.getAllMedicamentos(), HttpStatus.OK);
+        List<MedicamentoDto> medicamentos = medicamentoService.getAllMedicamentos();
+        return new ResponseEntity<>(medicamentos, HttpStatus.OK);
     }
 
     @GetMapping("/catMedicamentos")
@@ -69,7 +62,7 @@ public class MedicamentoController {
     }
 
     @GetMapping("/donanteCedula")
-    public ResponseEntity<List<MedicamentoDto>> getMedicamentoByDonanteCedula(@RequestParam Integer cedula){
+    public ResponseEntity<List<MedicamentoDto>> getMedicamentoByDonanteCedula(@RequestParam Long cedula){
         List<MedicamentoDto> medicamentos = medicamentoService.getMedicamentoByDonanteCedula(cedula);
         return new ResponseEntity<>(medicamentos, HttpStatus.OK);
     }

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 @Data
 public class SuministroDto {
-    private int id;
+    private Long id;
     private int cantidad;
     private LocalDate fechaSuministro;
 }

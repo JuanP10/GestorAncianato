@@ -31,30 +31,24 @@ public class DonanteController {
         return ResponseEntity.created(location).body(donanteDtoGuardar);
     }
 
-    /*@PutMapping ("/{cedula}")
-    public ResponseEntity<DonanteDto> updateDonante(@PathVariable Integer cedula, @RequestBody Donante donante){
-        Optional<DonanteDto> donanteDto = donanteService.updateDonante(cedula, donante);
-        if(donanteDto != null)
+    @PutMapping ("/{cedula}")
+    public ResponseEntity<DonanteDto> updateDonante(@PathVariable Long cedula, @RequestBody DonanteDto donante){
+        Optional<DonanteDto> donanteDto = Optional.ofNullable(donanteService.updateDonante(cedula, donante));
+        if(donanteDto.isPresent())
             return new ResponseEntity<>(donanteDto.get(), HttpStatus.OK);
-        DonanteDto donanteDtoGuardar = donanteService.createDonante(donante);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{cedula}")
-                .buildAndExpand(donanteDtoGuardar.getCedula())
-                .toUri();
-        return ResponseEntity.created(location).body(donanteDtoGuardar);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-     */
+
 
     @DeleteMapping("/{cedula}")
-    public ResponseEntity<Donante> deleteDonante(@PathVariable Integer cedula){
+    public ResponseEntity<Donante> deleteDonante(@PathVariable Long cedula){
         donanteService.deleteDonante(cedula);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{cedula}")
-    public ResponseEntity<DonanteDto> getDonanteByCedula(@PathVariable Integer cedula){
+    public ResponseEntity<DonanteDto> getDonanteByCedula(@PathVariable Long cedula){
         Optional<DonanteDto> donanteDto = donanteService.getDonanteByCedula(cedula);
         if(donanteDto.isPresent())
             return new ResponseEntity<>(donanteDto.get(), HttpStatus.OK);

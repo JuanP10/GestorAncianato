@@ -21,7 +21,7 @@ public class CategoriaMedicamentoServiceImp implements CategoriaMedicamentoServi
     }
 
     @Override
-    public CategoriaMedicamentoDto getCategoriaById(Integer id) {
+    public CategoriaMedicamentoDto getCategoriaById(Long id) {
         CategoriaMedicamento categoriaMedicamento = categoriaMedicamentoRepository.findById(id).orElseThrow(() -> new RuntimeException("Categoria no encontrada con el id: " + id));
         return categoriaMedicamentoMapper.toCategoriaMedicamentoDto(categoriaMedicamento);
     }
@@ -33,7 +33,7 @@ public class CategoriaMedicamentoServiceImp implements CategoriaMedicamentoServi
     }
 
     @Override
-    public CategoriaMedicamentoDto updateCategoria(Integer id, CategoriaMedicamentoDto categoriaMedicamento) {
+    public CategoriaMedicamentoDto updateCategoria(Long id, CategoriaMedicamentoDto categoriaMedicamento) {
         CategoriaMedicamento categoriaMedicamentoEntity = categoriaMedicamentoMapper.toCategoriaMedicamento(categoriaMedicamento);
         CategoriaMedicamento categoriaMedicamentoToUpdate = categoriaMedicamentoRepository.findById(id).map(categoriaMedicamentoEntity1 -> {
             categoriaMedicamentoEntity1.setNombreCat(categoriaMedicamentoEntity.getNombreCat());
@@ -43,7 +43,7 @@ public class CategoriaMedicamentoServiceImp implements CategoriaMedicamentoServi
     }
 
     @Override
-    public void deleteCategoriaById(Integer id) {
+    public void deleteCategoriaById (Long id) {
         CategoriaMedicamento categoriaMedicamento = categoriaMedicamentoRepository.findById(id).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
         categoriaMedicamentoRepository.delete(categoriaMedicamento);
 

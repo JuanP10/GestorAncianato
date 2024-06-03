@@ -1,20 +1,21 @@
 package com.example.gestorancianato.Dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 import java.time.LocalDate;
 
+import java.util.Set;
+
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 
 public class MedicamentoDto {
-    private int id;
+    private Long id;
     private String nombre;
     private int cantidad;
     private LocalDate fechaVencimiento;
-    private String cedulaDonante;
-    private DonanteDto donante;
+    private Long cedulaDonante;
+    private Set<Long> idsCategorias;
+
+
 }

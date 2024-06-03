@@ -39,7 +39,7 @@ public class DonanteServiceImp  implements DonanteService{
     }
 
     @Override
-    public Optional<DonanteDto> getDonanteByCedula(Integer cedula) {
+    public Optional<DonanteDto> getDonanteByCedula(Long cedula) {
         Optional<Donante> donante = donanteRepository.findById(cedula);
         if (donante.isPresent())
             return donante.map(donanteMapper::toDonanteDto);
@@ -48,20 +48,20 @@ public class DonanteServiceImp  implements DonanteService{
 
 
     @Override
-    public Optional<DonanteDto> updateDonante(Integer cedula, Donante donante) {
+    public DonanteDto updateDonante(Long cedula, DonanteDto donante) {
         Optional<Donante> donanteOptional = donanteRepository.findById(cedula);
         if (donanteOptional != null){
-            Donante updatedDonante = donanteOptional.get().updateDonante(donante);
+            Donante updatedDonante = donanteMapper.toDonante(donante);
             donanteRepository.save(updatedDonante);
-            return Optional.of(donanteMapper.toDonanteDto(updatedDonante));
+            return donanteMapper.toDonanteDto(updatedDonante);
         }else{
-            DonanteDto donanteDto = donanteMapper.toDonanteDto(donanteRepository.save(donante));
-            return Optional.ofNullable(donanteDto) ;
+            DonanteDto donanteDto = createDonante(donante);
+            return donanteDto;
         }
     }
 
     @Override
-    public ResponseEntity<String> deleteDonante(Integer cedula) {
+    public ResponseEntity<String> deleteDonante(Long cedula) {
        try {
               donanteRepository.deleteById(cedula);
               log.info("El donante con cedula {} ha sido eliminado", cedula);

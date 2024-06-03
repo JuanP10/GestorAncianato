@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Categorias")
@@ -17,11 +17,11 @@ import java.util.List;
 public class CategoriaMedicamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String nombreCat;
 
-    @ManyToMany(mappedBy = "categoriasMedicamentos")
-    private List<Medicamento> medicamentos;
+    @ManyToMany(mappedBy = "categoriaMedicamento")
+    private Set<Medicamento> medicamentos;
 
 
 }

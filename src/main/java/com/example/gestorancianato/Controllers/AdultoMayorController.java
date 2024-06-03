@@ -30,18 +30,18 @@ public class AdultoMayorController {
     }
 
     @PutMapping("/{cedula}")
-    public ResponseEntity<AdultoMayorDto> updateAdultoMayor(@PathVariable Integer cedula, @RequestBody AdultoMayorDto adultoMayor) {
+    public ResponseEntity<AdultoMayorDto> updateAdultoMayor(@PathVariable Long cedula, @RequestBody AdultoMayorDto adultoMayor) {
         return new ResponseEntity<>(adultoMayorService.updateAdultoMayor(cedula, adultoMayor), HttpStatus.OK);
     }
 
     @DeleteMapping ("/{cedula}")
-    public ResponseEntity<String> deleteAdultoMayor(@PathVariable Integer cedula) {
+    public ResponseEntity<String> deleteAdultoMayor(@PathVariable Long cedula) {
         adultoMayorService.deleteAdultoMayor(cedula);
         return ResponseEntity.ok().body("Adulto Mayor eliminado");
     }
 
     @GetMapping ("/{cedula}")
-    public ResponseEntity<AdultoMayorDto> getAdultoMayorByCedula(@PathVariable Integer cedula) {
+    public ResponseEntity<AdultoMayorDto> getAdultoMayorByCedula(@PathVariable Long cedula) {
         return new ResponseEntity<>(adultoMayorService.getAdultoMayorByCedula(cedula), HttpStatus.OK);
     }
 

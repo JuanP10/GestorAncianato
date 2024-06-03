@@ -25,13 +25,13 @@ public class SuministroController {
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<SuministroDto> updateSuministro(@PathVariable Integer id, @RequestBody SuministroDto suministro){
+    public ResponseEntity<SuministroDto> updateSuministro(@PathVariable Long id, @RequestBody SuministroDto suministro){
          SuministroDto suministroDto = suministroService.updateSuministro(id, suministro);
          return new ResponseEntity<>(suministroDto, HttpStatus.OK);
     }
 
     @DeleteMapping ("/{id}")
-    public ResponseEntity<String> deleteSuministro(@PathVariable Integer id){
+    public ResponseEntity<String> deleteSuministro(@PathVariable Long id){
         suministroService.deleteSuministroById(id);
         return new ResponseEntity<>("Suministro eliminado", HttpStatus.OK);
     }
@@ -43,7 +43,7 @@ public class SuministroController {
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity<SuministroDto> getSuministroById(@PathVariable Integer id){
+    public ResponseEntity<SuministroDto> getSuministroById(@PathVariable Long id){
         return new ResponseEntity<>(suministroService.getSuministroById(id), HttpStatus.OK);
     }
 
@@ -60,7 +60,7 @@ public class SuministroController {
     }
 
     @GetMapping ("/adultoMayor/{cedula}")
-    public ResponseEntity<List<SuministroDto>> getSuministroByAdultoMayor(@PathVariable Integer cedula){
+    public ResponseEntity<List<SuministroDto>> getSuministroByAdultoMayor(@PathVariable Long cedula){
         List<SuministroDto> suministros = suministroService.getSuministrosByAdultoMayor(cedula);
         return new ResponseEntity<>(suministros, HttpStatus.OK);
     }

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Enfermero {
     @Id
-    private int cedula;
+    private Long cedula;
     private String nombre;
     private String apellido;
 

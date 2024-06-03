@@ -37,13 +37,13 @@ public class EnfermeroServiceImp implements EnfermeroService {
     }
 
     @Override
-    public List<EnfermeroDto> getEnfermeroByCedula(Integer cedula) {
+    public List<EnfermeroDto> getEnfermeroByCedula(Long cedula) {
        List<Enfermero> enfermeros = enfermeroRepository.findByCedula(cedula);
        return enfermeros.stream().map(enfemeroMapper::toEnfermeroDto).toList();
     }
 
     @Override
-    public EnfermeroDto updateEnfermero(Integer cedula, EnfermeroDto enfermero) {
+    public EnfermeroDto updateEnfermero(Long cedula, EnfermeroDto enfermero) {
         Enfermero enfermeroEntity = enfemeroMapper.toEnfermero(enfermero);
         Enfermero enfermeroToUpdate = enfermeroRepository.findById(cedula).map(enfermeroEncontrado -> {
             enfermeroEncontrado.setNombre(enfermeroEntity.getNombre());
@@ -58,7 +58,7 @@ public class EnfermeroServiceImp implements EnfermeroService {
     }
 
     @Override
-    public void deleteEnfermero(Integer cedula) {
+    public void deleteEnfermero(Long cedula) {
         Enfermero enfermero = enfermeroRepository.findById(cedula).orElseThrow(() -> new RuntimeException("Enfermero no encontrado"));
         enfermeroRepository.deleteById(cedula);
     }

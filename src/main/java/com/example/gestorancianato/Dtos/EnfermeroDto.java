@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class EnfermeroDto {
-    private int cedula;
+    private Long cedula;
     private String nombre;
     private String apellido;
 

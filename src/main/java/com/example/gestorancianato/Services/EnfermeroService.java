@@ -9,11 +9,11 @@ public interface EnfermeroService {
 
     List<EnfermeroDto> getAllEnfermeros();
 
-    List<EnfermeroDto> getEnfermeroByCedula(Integer integer);
+    List<EnfermeroDto> getEnfermeroByCedula(Long integer);
 
-    EnfermeroDto updateEnfermero(Integer cedula, EnfermeroDto enfermero);
+    EnfermeroDto updateEnfermero(Long cedula, EnfermeroDto enfermero);
 
-    void deleteEnfermero(Integer cedula);
+    void deleteEnfermero(Long cedula);
 
     List<EnfermeroDto> getEnfermeroByNombreAndApellido(String nombre, String apellido);
 }

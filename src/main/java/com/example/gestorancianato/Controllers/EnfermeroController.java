@@ -33,19 +33,19 @@ public class EnfermeroController {
     }
 
     @GetMapping("/{cedula}")
-    public ResponseEntity<List<EnfermeroDto>> getEnfermeroByCedula(@PathVariable Integer cedula) {
+    public ResponseEntity<List<EnfermeroDto>> getEnfermeroByCedula(@PathVariable Long cedula) {
         List<EnfermeroDto> enfermeros = enfermeroService.getEnfermeroByCedula(cedula);
         return new ResponseEntity<>(enfermeros, HttpStatus.OK);
     }
 
     @PutMapping("/{cedula}")
-    public ResponseEntity<EnfermeroDto> updateEnfermero(@PathVariable Integer cedula, @RequestBody EnfermeroDto enfermero) {
+    public ResponseEntity<EnfermeroDto> updateEnfermero(@PathVariable Long cedula, @RequestBody EnfermeroDto enfermero) {
         EnfermeroDto enfermeroDto = enfermeroService.updateEnfermero(cedula, enfermero);
         return new ResponseEntity<>(enfermeroDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{cedula}")
-    public ResponseEntity<String> deleteEnfermero(@PathVariable Integer cedula) {
+    public ResponseEntity<String> deleteEnfermero(@PathVariable Long cedula) {
         enfermeroService.deleteEnfermero(cedula);
         return new ResponseEntity<>("Enfermero eliminado", HttpStatus.OK);
     }

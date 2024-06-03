@@ -24,18 +24,18 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaMedicamentoDto> updateCategoria(@PathVariable Integer id, @RequestBody CategoriaMedicamentoDto categoriaMedicamento){
+    public ResponseEntity<CategoriaMedicamentoDto> updateCategoria(@PathVariable Long id, @RequestBody CategoriaMedicamentoDto categoriaMedicamento){
         return new ResponseEntity<>(categoriaMedicamentoService.updateCategoria(id, categoriaMedicamento), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategoria(@PathVariable Integer id){
+    public ResponseEntity<String> deleteCategoria(@PathVariable Long id){
         categoriaMedicamentoService.deleteCategoriaById(id);
         return new ResponseEntity<>("Categoria eliminada", HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriaMedicamentoDto> getCategoriaById(@PathVariable Integer id){
+    public ResponseEntity<CategoriaMedicamentoDto> getCategoriaById(@PathVariable Long id){
         CategoriaMedicamentoDto categoriaMedicamento = categoriaMedicamentoService.getCategoriaById(id);
         return new ResponseEntity<>(categoriaMedicamento, HttpStatus.OK);
     }

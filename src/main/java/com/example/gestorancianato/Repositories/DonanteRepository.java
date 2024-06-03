@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface  DonanteRepository extends JpaRepository<Donante, Integer> {
+public interface  DonanteRepository extends JpaRepository<Donante, Long> {
     Optional<Donante> findByNombreOrApellido(String nombre, String apellido);
+
+    Optional<Donante> findByCedula(Long cedula);
 
 }

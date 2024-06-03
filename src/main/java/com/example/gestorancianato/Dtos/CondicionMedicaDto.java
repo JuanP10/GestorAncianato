@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CondicionMedicaDto {
-    private int id;
+    private Long id;
     private String nombre;
 }

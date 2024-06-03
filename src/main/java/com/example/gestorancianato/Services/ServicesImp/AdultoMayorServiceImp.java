@@ -2,30 +2,48 @@ package com.example.gestorancianato.Services.ServicesImp;
 
 import com.example.gestorancianato.Dtos.AdultoMayorDto;
 import com.example.gestorancianato.Entities.AdultoMayor;
+import com.example.gestorancianato.Entities.CondicionMedica;
 import com.example.gestorancianato.Mappers.AdultoMayorMapper;
 import com.example.gestorancianato.Repositories.AdultoMayorRepository;
+import com.example.gestorancianato.Repositories.CondicionMedicaRepository;
 import com.example.gestorancianato.Services.AdultoMayorService;
 import jakarta.persistence.EntityNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AdultoMayorServiceImp implements AdultoMayorService {
     private final AdultoMayorRepository adultoMayorRepository;
     private final AdultoMayorMapper adultoMayorMapper;
 
-    public AdultoMayorServiceImp(AdultoMayorRepository adultoMayorRepository, AdultoMayorMapper adultoMayorMapper) {
+    private final CondicionMedicaRepository condicionMedicaRepository;
+
+    public AdultoMayorServiceImp(AdultoMayorRepository adultoMayorRepository, AdultoMayorMapper adultoMayorMapper, CondicionMedicaRepository condicionMedicaRepository) {
         this.adultoMayorRepository = adultoMayorRepository;
         this.adultoMayorMapper = adultoMayorMapper;
+        this.condicionMedicaRepository = condicionMedicaRepository;
     }
 
     @Override
     public AdultoMayorDto createAdultoMayor(AdultoMayorDto adultoMayorDto) {
+        Set<CondicionMedica> condicionMedicas = new HashSet<>();
+        for (Long condiciones : adultoMayorDto.getIdsCondicion()){
+            CondicionMedica condicion = condicionMedicaRepository.findById(condiciones).
+                    orElseThrow(() -> new EntityNotFoundException("Condicion Medica no registradada con el id: " + condiciones));
+            condicionMedicas.add(condicion);
+        }
+
         AdultoMayor adultoMayor = adultoMayorMapper.toAdultoMayor(adultoMayorDto);
-        return adultoMayorMapper.toAdultoMayorDto(adultoMayorRepository.save(adultoMayor));
+        adultoMayor.setCondicionesMedicas(condicionMedicas);
+
+        AdultoMayor savedAdultoMayor = adultoMayorRepository.save(adultoMayor);
+        return adultoMayorMapper.toAdultoMayorDto(savedAdultoMayor);
     }
 
     @Override
@@ -35,27 +53,38 @@ public class AdultoMayorServiceImp implements AdultoMayorService {
     }
 
     @Override
-    public AdultoMayorDto getAdultoMayorByCedula(Integer cedula) {
+    public AdultoMayorDto getAdultoMayorByCedula(Long cedula) {
         AdultoMayor adultoMayor = adultoMayorRepository.findByCedula(cedula)
                 .orElseThrow(() -> new EntityNotFoundException("Adulto Mayor no encontrado con cedula: " + cedula));
         return adultoMayorMapper.toAdultoMayorDto(adultoMayor);
     }
 
     @Override
-    public AdultoMayorDto updateAdultoMayor(Integer cedula, AdultoMayorDto adultoMayorDto) {
-        AdultoMayor adultoMayorEntity = adultoMayorMapper.toAdultoMayor(adultoMayorDto);
-        AdultoMayor adultoMayorActualizado = adultoMayorRepository.findByCedula(cedula).map(adultoMayorEncontrado -> {
-            adultoMayorEncontrado.setNombre(adultoMayorEntity.getNombre());
-            adultoMayorEncontrado.setApellido(adultoMayorEntity.getApellido());
-            adultoMayorEncontrado.setFechaNacimiento(adultoMayorEntity.getFechaNacimiento());
-            adultoMayorEncontrado.setEsPensionado(adultoMayorEntity.getEsPensionado());
-            return adultoMayorRepository.save(adultoMayorEncontrado);
-        }).orElseThrow(() -> new EntityNotFoundException("Adulto Mayor no encontrado"));
-        return adultoMayorMapper.toAdultoMayorDto(adultoMayorActualizado);
+    public AdultoMayorDto updateAdultoMayor(Long cedula, AdultoMayorDto adultoMayorDto) {
+        AdultoMayor adultoMayor = adultoMayorRepository.findByCedula(cedula)
+                .orElseThrow(() ->new ResponseStatusException(HttpStatus.NOT_FOUND, "Adulto Mayor no encontrado con la cedula: " + cedula));
+
+        Set<CondicionMedica> condicionMedicas = new HashSet<>();
+        for (Long condiciones : adultoMayorDto.getIdsCondicion()){
+            CondicionMedica condicion = condicionMedicaRepository.findById(condiciones)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Condicion Medica no registrada con el id: " + condiciones));
+            condicionMedicas.add(condicion);
+        }
+
+        adultoMayor.setNombre(adultoMayor.getNombre());
+        adultoMayor.setApellido(adultoMayor.getApellido());
+        adultoMayor.setFechaNacimiento(adultoMayor.getFechaNacimiento());
+        adultoMayor.setEsPensionado(adultoMayor.getEsPensionado());
+        adultoMayor.setCondicionesMedicas(condicionMedicas);
+
+        AdultoMayor updateAdultoMayor = adultoMayorRepository.save(adultoMayor);
+
+        return adultoMayorMapper.toAdultoMayorDto(updateAdultoMayor);
+
     }
 
     @Override
-    public void deleteAdultoMayor(Integer cedula) {
+    public void deleteAdultoMayor(Long cedula) {
         AdultoMayor adultoMayor = adultoMayorRepository.findByCedula(cedula)
                 .orElseThrow(() -> new EntityNotFoundException("Adulto Mayor no encontrado"));
         adultoMayorRepository.delete(adultoMayor);

@@ -10,16 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MedicamentoRepository extends JpaRepository<Medicamento, String> {
-    @Query("SELECT m FROM Medicamento m JOIN m.categoriasMedicamentos cm WHERE cm.nombreCat = :categoria")
-    List<Medicamento> findByCatMedicamentos(@Param("categoria") String categoria);
+public interface MedicamentoRepository extends JpaRepository<Medicamento, Long> {
+    @Query("SELECT m FROM Medicamento m JOIN m.categoriaMedicamento c WHERE c.nombreCat = :categoriaNombre")
+    List<Medicamento> findByCatMedicamentos(@Param("categoriaNombre") String categoria);
 
     @Query("SELECT m FROM Medicamento m WHERE m.donante.cedula = :cedula")
-    List<Medicamento> findByDonanteCedula (@Param("cedula") Integer cedula);
+    List<Medicamento> findByDonanteCedula (@Param("cedula") Long cedula);
 
     //Busca por mes y año de nacimiento
     @Query("SELECT m FROM Medicamento m WHERE MONTH(m.fechaVencimiento) = :mes AND YEAR(m.fechaVencimiento) = :año")
     List<Medicamento> findByFechaVencimientoMesAndAño(@Param("mes") int mes, @Param("año") int año);
 
-    Optional<Medicamento> findById(Integer id);
 }

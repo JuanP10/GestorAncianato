@@ -25,7 +25,7 @@ public class CondicionMedicaServiceImp implements CondicionMedicaService {
     }
 
     @Override
-    public CondicionMedicaDto getCondicionById (Integer id) {
+    public CondicionMedicaDto getCondicionById (Long id) {
         CondicionMedica condicionMedica = condicionMedicaRepository.findById(id).orElseThrow(()-> new RuntimeException("Condicion no encontrada con id: "+id));
         return condicionMedicaMapper.toCondicionMedicaDto(condicionMedica);
     }
@@ -37,7 +37,7 @@ public class CondicionMedicaServiceImp implements CondicionMedicaService {
     }
 
     @Override
-    public CondicionMedicaDto updateCondicion (Integer id, CondicionMedicaDto condicionMedica) {
+    public CondicionMedicaDto updateCondicion (Long id, CondicionMedicaDto condicionMedica) {
         CondicionMedica condicionMedicaEntity = condicionMedicaMapper.toCondicionMedica(condicionMedica);
         CondicionMedica condicionMedicaToUpdate = condicionMedicaRepository.findById(id).map(condicionMedica1 -> {
             condicionMedica1.setNombre(condicionMedicaEntity.getNombre());
@@ -47,7 +47,7 @@ public class CondicionMedicaServiceImp implements CondicionMedicaService {
     }
 
     @Override
-    public void deleteCondicionById(Integer id) {
+    public void deleteCondicionById(Long id) {
         CondicionMedica condicionMedica = condicionMedicaRepository.findById(id).orElseThrow(() -> new RuntimeException("Condicion no encontrada con id: "+id));
         condicionMedicaRepository.delete(condicionMedica);
     }

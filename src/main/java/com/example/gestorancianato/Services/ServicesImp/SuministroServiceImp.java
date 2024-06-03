@@ -36,7 +36,7 @@ public class SuministroServiceImp implements SuministroService {
     }
 
     @Override
-    public SuministroDto updateSuministro(Integer id, SuministroDto suministro) {
+    public SuministroDto updateSuministro(Long id, SuministroDto suministro) {
         Suministro suministroEntity = suministroMapper.toSuministro(suministro);
         Suministro suministroToUpdate = suministroRepository.findById(id).map(suministro1 -> {
             suministro1.setFechaSuministro(suministroEntity.getFechaSuministro());
@@ -47,14 +47,14 @@ public class SuministroServiceImp implements SuministroService {
     }
 
     @Override
-    public void deleteSuministroById(Integer id) {
+    public void deleteSuministroById(Long id) {
         Suministro suministro = suministroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Suministro no encontrado"));
         suministroRepository.delete(suministro);
 
     }
 
     @Override
-    public SuministroDto getSuministroById(Integer id) {
+    public SuministroDto getSuministroById(Long id) {
         Suministro suministro = suministroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Suministro no encontrado"));
         return suministroMapper.toSuministroDto(suministro);
     }
@@ -72,7 +72,7 @@ public class SuministroServiceImp implements SuministroService {
     }
 
     @Override
-    public List<SuministroDto> getSuministrosByAdultoMayor(Integer cedula) {
+    public List<SuministroDto> getSuministrosByAdultoMayor(Long cedula) {
         List<Suministro> suministros = suministroRepository.findSuministrosByAdultoMayor_Cedula(cedula);
         return suministros.stream().map(suministroMapper::toSuministroDto).toList();
     }

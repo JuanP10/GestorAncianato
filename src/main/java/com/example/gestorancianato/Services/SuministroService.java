@@ -1,9 +1,5 @@
 package com.example.gestorancianato.Services;
 
-
-
-
-
 import com.example.gestorancianato.Dtos.SuministroDto;
 
 import java.util.List;
@@ -16,15 +12,15 @@ public interface SuministroService {
 
     List<SuministroDto> getAllSuministros();
 
-    SuministroDto updateSuministro(Integer id, SuministroDto suministro);
+    SuministroDto updateSuministro(Long id, SuministroDto suministro);
 
-    void deleteSuministroById(Integer id);
+    void deleteSuministroById(Long id);
 
-    SuministroDto getSuministroById(Integer id);
+    SuministroDto getSuministroById(Long id);
 
     List<SuministroDto> getSuministrosByFecha(LocalDate fechaInicio, LocalDate fechaFin);
 
     List<SuministroDto> getSuministrosByMedicamento(String medicamento);
 
-    List<SuministroDto> getSuministrosByAdultoMayor(Integer cedula);
+    List<SuministroDto> getSuministrosByAdultoMayor(Long cedula);
 }

@@ -7,7 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Adultos_Mayores")
@@ -16,21 +17,21 @@ import java.util.List;
 @AllArgsConstructor
 public class AdultoMayor {
     @Id
-    private Integer cedula;
+    private Long cedula;
     private String nombre;
     private String apellido;
     private LocalDate fechaNacimiento;
     private Boolean esPensionado;
 
     @OneToMany(mappedBy = "adultoMayor")
-    private List<Suministro> suministros;
+    private Set<Suministro> suministros;
 
     @ManyToMany
     @JoinTable(
             name = "Adulto_Condicion",
             joinColumns = @JoinColumn(name = "adulto_id"),
             inverseJoinColumns = @JoinColumn(name = "condicion_id"))
-    private List<CondicionMedica> condicionesMedicas;
+    private Set<CondicionMedica> condicionesMedicas = new HashSet<>();
 
 
 }

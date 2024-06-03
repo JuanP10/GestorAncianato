@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface CategoriaMedicamentoService {
 
-    CategoriaMedicamentoDto getCategoriaById(Integer id);
+    CategoriaMedicamentoDto getCategoriaById(Long id);
     CategoriaMedicamentoDto createCategoria(CategoriaMedicamentoDto categoriaMedicamento);
-    CategoriaMedicamentoDto updateCategoria(Integer id, CategoriaMedicamentoDto categoriaMedicamento);
-    void deleteCategoriaById(Integer id);
+    CategoriaMedicamentoDto updateCategoria(Long id, CategoriaMedicamentoDto categoriaMedicamento);
+    void deleteCategoriaById(Long id);
     List<CategoriaMedicamentoDto> getAllCategorias();
 
 }

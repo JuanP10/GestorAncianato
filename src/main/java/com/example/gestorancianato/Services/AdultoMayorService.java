@@ -10,11 +10,11 @@ public interface AdultoMayorService {
 
     List<AdultoMayorDto> getAllAdultoMayor();
 
-    AdultoMayorDto getAdultoMayorByCedula (Integer cedula);
+    AdultoMayorDto getAdultoMayorByCedula (Long cedula);
 
-    AdultoMayorDto updateAdultoMayor(Integer cedula, AdultoMayorDto adultoMayor);
+    AdultoMayorDto updateAdultoMayor(Long cedula, AdultoMayorDto adultoMayor);
 
-    void deleteAdultoMayor(Integer cedula);
+    void deleteAdultoMayor(Long cedula);
 
     List<AdultoMayorDto> getAdultoMayorByNombreAndApellido(String nombre, String apellido);
 

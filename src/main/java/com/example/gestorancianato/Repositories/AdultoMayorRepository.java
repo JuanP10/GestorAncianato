@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AdultoMayorRepository extends JpaRepository<AdultoMayor,Integer> {
+public interface AdultoMayorRepository extends JpaRepository<AdultoMayor,Long> {
 
-    Optional<AdultoMayor> findByCedula(Integer cedula);
+    Optional<AdultoMayor> findByCedula(Long cedula);
 
     @Query("SELECT a FROM AdultoMayor a JOIN a.condicionesMedicas c WHERE c.nombre = :nombreCondicion")
     List<AdultoMayor> findAdultosMayoresByCondicionMedica(@Param("nombreCondicion") String nombreCondicion);

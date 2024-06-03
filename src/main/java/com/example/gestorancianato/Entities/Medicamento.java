@@ -1,13 +1,13 @@
 package com.example.gestorancianato.Entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Medicamentos")
@@ -17,29 +17,22 @@ import java.util.List;
 
 public class Medicamento {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String nombre;
     private int cantidad;
     private LocalDate fechaVencimiento;
 
     @ManyToOne
-    @JoinColumn(name = "donanteID")
-    @JsonBackReference
+    @JoinColumn(name = "cedula_donante")
     private Donante donante;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "Medicamento_Categoria",
             joinColumns = @JoinColumn(name = "medicamento_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-    private List<CategoriaMedicamento> categoriasMedicamentos;
+    private Set<CategoriaMedicamento> categoriaMedicamento = new HashSet<>();
 
-    @OneToMany(mappedBy = "medicamento")
-    private List<Suministro> suministros;
-
-    public Medicamento updateMedicamento (Medicamento medicamento){
-        return new Medicamento(medicamento.getId(), medicamento.getNombre(), medicamento.getCantidad(), medicamento.getFechaVencimiento(), medicamento.getDonante(), medicamento.getCategoriasMedicamentos(), medicamento.getSuministros());
-    }
 }
 
 

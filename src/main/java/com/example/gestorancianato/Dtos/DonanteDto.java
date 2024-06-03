@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 
 public class DonanteDto {
-    private Integer cedula;
+    private Long cedula;
     private String nombre;
     private String apellido;
     private Long telefono;
