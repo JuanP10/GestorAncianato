@@ -12,6 +12,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,15 +50,19 @@ public class DonanteServiceImp  implements DonanteService{
 
     @Override
     public DonanteDto updateDonante(Long cedula, DonanteDto donante) {
-        Optional<Donante> donanteOptional = donanteRepository.findById(cedula);
-        if (donanteOptional != null){
-            Donante updatedDonante = donanteMapper.toDonante(donante);
-            donanteRepository.save(updatedDonante);
-            return donanteMapper.toDonanteDto(updatedDonante);
-        }else{
-            DonanteDto donanteDto = createDonante(donante);
-            return donanteDto;
-        }
+        Donante donante1 = donanteRepository.findByCedula(cedula)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Donante no encontrado"));
+
+        // Actualizar los campos del donante existente
+        donante1.setNombre(donante.getNombre());
+        donante1.setApellido(donante.getApellido());
+        donante1.setTelefono(donante.getTelefono());
+        donante1.setDireccion(donante.getDireccion());
+
+        // Guardar los cambios
+        Donante updatedDonante = donanteRepository.save(donante1);
+
+        return donanteMapper.toDonanteDto(updatedDonante);
     }
 
     @Override

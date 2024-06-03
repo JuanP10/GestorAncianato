@@ -33,10 +33,12 @@ public class DonanteController {
 
     @PutMapping ("/{cedula}")
     public ResponseEntity<DonanteDto> updateDonante(@PathVariable Long cedula, @RequestBody DonanteDto donante){
-        Optional<DonanteDto> donanteDto = Optional.ofNullable(donanteService.updateDonante(cedula, donante));
-        if(donanteDto.isPresent())
-            return new ResponseEntity<>(donanteDto.get(), HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Optional<DonanteDto> updatedDonante = Optional.ofNullable(donanteService.updateDonante(cedula, donante));
+        if (updatedDonante.isPresent()) {
+            return new ResponseEntity<>(updatedDonante.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 

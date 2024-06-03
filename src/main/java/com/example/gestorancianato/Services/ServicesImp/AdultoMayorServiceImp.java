@@ -3,6 +3,8 @@ package com.example.gestorancianato.Services.ServicesImp;
 import com.example.gestorancianato.Dtos.AdultoMayorDto;
 import com.example.gestorancianato.Entities.AdultoMayor;
 import com.example.gestorancianato.Entities.CondicionMedica;
+import com.example.gestorancianato.Exepciones.CategoriaMedicamentoNotFoundException;
+import com.example.gestorancianato.Exepciones.DonanteNotFoundException;
 import com.example.gestorancianato.Mappers.AdultoMayorMapper;
 import com.example.gestorancianato.Repositories.AdultoMayorRepository;
 import com.example.gestorancianato.Repositories.CondicionMedicaRepository;
@@ -35,7 +37,7 @@ public class AdultoMayorServiceImp implements AdultoMayorService {
         Set<CondicionMedica> condicionMedicas = new HashSet<>();
         for (Long condiciones : adultoMayorDto.getIdsCondicion()){
             CondicionMedica condicion = condicionMedicaRepository.findById(condiciones).
-                    orElseThrow(() -> new EntityNotFoundException("Condicion Medica no registradada con el id: " + condiciones));
+                    orElseThrow(() -> new CategoriaMedicamentoNotFoundException("Condicion Medica no registradada con el id: " + condiciones));
             condicionMedicas.add(condicion);
         }
 

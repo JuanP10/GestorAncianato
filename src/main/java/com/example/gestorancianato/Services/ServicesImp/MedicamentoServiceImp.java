@@ -42,7 +42,7 @@ public class MedicamentoServiceImp implements MedicamentoService {
     public MedicamentoDto createMedicamento(MedicamentoDto medicamentoDto) {
         // Verificar que el Donante existe
         Donante donante = donanteRepository.findByCedula(medicamentoDto.getCedulaDonante())
-                .orElseThrow(() -> new DonanteNotFoundException("Donante no registrado con la cedula: "));
+                .orElseThrow(() -> new DonanteNotFoundException("Donante no registrado con la cedula: " + medicamentoDto.getCedulaDonante()));
 
         // Verificar que las Categorias existen
         Set<CategoriaMedicamento> categorias = new HashSet<>();
