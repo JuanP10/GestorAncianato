@@ -27,7 +27,4 @@ public class Donante {
     @JsonManagedReference
     private Set<Medicamento> medicamentos = new HashSet<>();
 
-    public Donante updateDonante (Donante donante){
-        return new Donante(donante.getCedula(), donante.getNombre(), donante.getApellido(), donante.getTelefono(), donante.getDireccion(), donante.getMedicamentos());
-    }
 }
